@@ -145,6 +145,7 @@ set(
   src/runMergerTest.cxx
   src/runReadoutForDataDump.cxx
   src/runRepositoryBenchmark.cxx
+  src/runContainterBenchmark.cxx
 )
 
 set(
@@ -157,6 +158,7 @@ set(
   runMergerTest
   qcRunReadoutForDataDump
   repositoryBenchmark
+  qcRunContainerBenchmark
 )
 
 list(LENGTH EXE_SRCS count)
