@@ -122,10 +122,18 @@ AlgorithmSpec::InitCallback receiverTemplate(std::string type, size_t moCount, s
       if ( diff > time * 1000 && !finished) {
         std::ofstream outfile;
         outfile.open("tcontainers.txt", std::ios_base::app);
-        outfile << type << ", " << moCount << " mo/container: "
-                << std::to_string(receivedMOs) << " " << std::to_string(receivedMessages) << " "
-                << std::to_string(receivedMOs/(diff/1000.0)) << " " << std::to_string(receivedMessages/(diff/1000.0))
-                << std::endl;
+        outfile.width(10);
+        outfile << type << ", ";
+        outfile.width(5);
+        outfile << moCount << " mo/container: ";
+        outfile.width(5);
+        outfile << std::to_string(receivedMOs) << " ";
+        outfile.width(5);
+        outfile << std::to_string(receivedMessages) << " ";
+        outfile.width(5);
+        outfile << std::to_string(int(receivedMOs/(diff/1000.0))) << " " ;
+        outfile.width(5);
+        outfile << std::to_string(int(receivedMessages/(diff/1000.0))) << std::endl;
         ctx.services().get<ControlService>().readyToQuit(true);
         finished = true;
       }
