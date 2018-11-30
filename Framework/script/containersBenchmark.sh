@@ -7,9 +7,7 @@ containers=(map tmap tobjarray thashlist)
 mo_counts=(1 3 10 33 100)
 time=$1
 
-if [ -d tcontainers_results.txt ] ; then
-  rm tcontainers_results.txt
-fi
+echo 'Ctr type  |MO/ctr | rcved MOs|rcved msgs|MOs per s |msgs per s' > tcontainers.txt
 
 for container in ${containers[*]}
 do
