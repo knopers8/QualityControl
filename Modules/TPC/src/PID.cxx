@@ -63,6 +63,9 @@ void PID::monitorData(o2::framework::ProcessingContext& ctx)
   auto tracks = ctx.inputs().get<TrackType>("tpc-sampled-tracks");
   QcInfoLogger::GetInstance() << "monitorData: " << tracks.size() << AliceO2::InfoLogger::InfoLogger::endm;
 
+  auto dpHeader = o2::header::get<framework::DataProcessingHeader*>(ctx.inputs().get("tpc-sampled-tracks").header);
+  QcInfoLogger::GetInstance() << "dpHeader->startTime: " << dpHeader->startTime << AliceO2::InfoLogger::InfoLogger::endm;
+
   for (auto const& track : tracks) {
     mQCPID.processTrack(track);
     //const auto p = track.getP();
