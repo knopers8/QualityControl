@@ -57,11 +57,14 @@ framework::WorkflowSpec InfrastructureGenerator::generateStandaloneInfrastructur
   auto config = ConfigurationFactory::getConfiguration(configurationSource);
   printVersion();
 
-  TaskRunnerFactory taskRunnerFactory;
   if (config->getRecursive("qc").count("tasks")) {
     for (const auto& [taskName, taskConfig] : config->getRecursive("qc.tasks")) {
       if (taskConfig.get<bool>("active", true)) {
-        workflow.emplace_back(taskRunnerFactory.create(taskName, configurationSource, 0));
+        // The "resetAfterCycles" parameters should be handled differently for standalone/remote and local tasks,
+        // thus we should not let TaskRunnerFactory read it and decide by itself, since it might not be aware of
+        // the context we run QC.
+        size_t resetAfterCycles = taskConfig.get<int>("resetAfterCycles", 0);
+        workflow.emplace_back(TaskRunnerFactory::create(taskName, configurationSource, resetAfterCycles));
       }
     }
   }
@@ -105,9 +108,11 @@ WorkflowSpec InfrastructureGenerator::generateLocalInfrastructure(std::string co
       for (const auto& machine : taskConfig.get_child("localMachines")) {
         // We spawn a task and proxy only if we are on the right machine.
         if (machine.second.get<std::string>("") == host) {
+          // If we use delta mergers, then the moving window is implemented by the last Merger layer.
+          // The QC Tasks should always send a delta covering one cycle.
+          int resetAfterCycles = taskConfig.get<std::string>("mergingMode", "delta") == "delta" ? 1 : taskConfig.get<int>("resetAfterCycles", 0);
           // Generate QC Task Runner
-          bool needsResetAfterCycle = taskConfig.get<std::string>("mergingMode", "delta") == "delta";
-          workflow.emplace_back(taskRunnerFactory.create(taskName, configurationSource, id, needsResetAfterCycle));
+          workflow.emplace_back(taskRunnerFactory.create(taskName, configurationSource, id, resetAfterCycles));
           // Generate an output proxy
           // These should be removed when we are able to declare dangling output in normal DPL devices
           auto remoteMachine = taskConfig.get_optional<std::string>("remoteMachine");
@@ -175,7 +180,6 @@ o2::framework::WorkflowSpec InfrastructureGenerator::generateRemoteInfrastructur
   printVersion();
 
   if (config->getRecursive("qc").count("tasks")) {
-    TaskRunnerFactory taskRunnerFactory;
     for (const auto& [taskName, taskConfig] : config->getRecursive("qc.tasks")) {
       if (!taskConfig.get<bool>("active", true)) {
         ILOG(Info, Devel) << "Task " << taskName << " is disabled, ignoring." << ENDM;
@@ -196,9 +200,12 @@ o2::framework::WorkflowSpec InfrastructureGenerator::generateRemoteInfrastructur
         }
         generateLocalTaskRemoteProxy(workflow, taskName, numberOfLocalMachines, remotePort.value_or(defaultRemotePort));
 
-        generateMergers(workflow, taskName, numberOfLocalMachines,
-                        taskConfig.get<double>("cycleDurationSeconds"),
-                        taskConfig.get<std::string>("mergingMode", "delta"));
+        auto mergingMode = taskConfig.get<std::string>("mergingMode", "delta");
+        // In "delta" mode Mergers should implement moving window, in "entire" - QC Tasks.
+        size_t resetAfterCycles = mergingMode == "delta" ? taskConfig.get<int>("resetAfterCycles", 0) : 0;
+        auto cycleDurationSeconds = taskConfig.get<double>("cycleDurationSeconds") * taskConfig.get<double>("mergerCycleMultiplier", 1);
+
+        generateMergers(workflow, taskName, numberOfLocalMachines, cycleDurationSeconds, mergingMode, resetAfterCycles);
 
       } else if (taskConfig.get<std::string>("location") == "remote") {
 
@@ -220,8 +227,9 @@ o2::framework::WorkflowSpec InfrastructureGenerator::generateRemoteInfrastructur
           throw std::runtime_error("Configuration error: dataSource type unknown : " + type);
         }
 
+        auto resetAfterCycles = taskConfig.get<int>("resetAfterCycles", 0);
         // Creating the remote task
-        workflow.emplace_back(taskRunnerFactory.create(taskName, configurationSource, 0));
+        workflow.emplace_back(TaskRunnerFactory::create(taskName, configurationSource, resetAfterCycles));
       }
     }
   }
@@ -352,7 +360,7 @@ void InfrastructureGenerator::generateLocalTaskRemoteProxy(framework::WorkflowSp
 
 void InfrastructureGenerator::generateMergers(framework::WorkflowSpec& workflow, std::string taskName,
                                               size_t numberOfLocalMachines, double cycleDurationSeconds,
-                                              std::string mergingMode)
+                                              std::string mergingMode, size_t resetAfterCycles)
 {
   Inputs mergerInputs;
   for (size_t id = 1; id <= numberOfLocalMachines; id++) {
@@ -372,7 +380,7 @@ void InfrastructureGenerator::generateMergers(framework::WorkflowSpec& workflow,
   // if we are to change the mode to Full, disable reseting tasks after each cycle.
   mergerConfig.inputObjectTimespan = { (mergingMode.empty() || mergingMode == "delta") ? InputObjectsTimespan::LastDifference : InputObjectsTimespan::FullHistory };
   mergerConfig.publicationDecision = { PublicationDecision::EachNSeconds, cycleDurationSeconds };
-  mergerConfig.mergedObjectTimespan = { MergedObjectTimespan::FullHistory, 0 };
+  mergerConfig.mergedObjectTimespan = { MergedObjectTimespan::NCycles, (int)resetAfterCycles };
   // for now one merger should be enough, multiple layers to be supported later
   mergerConfig.topologySize = { TopologySize::NumberOfLayers, 1 };
   mergersBuilder.setConfig(mergerConfig);
