@@ -15,6 +15,7 @@
 
 #include "QualityControl/TaskRunnerFactory.h"
 #include "QualityControl/TaskRunner.h"
+#include "QualityControl/TaskConfig.h"
 
 #include <Framework/DeviceSpec.h>
 #include <Framework/CompletionPolicy.h>
@@ -25,10 +26,9 @@ namespace o2::quality_control::core
 using namespace o2::framework;
 
 o2::framework::DataProcessorSpec
-  TaskRunnerFactory::create(std::string taskName, std::string configurationSource, size_t id, size_t resetAfterCycles)
+  TaskRunnerFactory::create(const TaskConfig& taskConfig)
 {
-  TaskRunner qcTask{ taskName, configurationSource, id };
-  qcTask.setResetAfterCycles(resetAfterCycles);
+  TaskRunner qcTask{ taskConfig };
 
   DataProcessorSpec newTask{
     qcTask.getDeviceName(),

@@ -74,7 +74,7 @@ class TaskRunner : public framework::Task
   /// \param taskName - name of the task, which exists in tasks list in the configuration file
   /// \param configurationSource - absolute path to configuration file, preceded with backend (f.e. "json://")
   /// \param id - subSpecification for taskRunner's OutputSpec, useful to avoid outputs collisions one more complex topologies
-  TaskRunner(const std::string& taskName, const std::string& configurationSource, size_t id = 0);
+  TaskRunner(const TaskConfig& config);
   ~TaskRunner() override = default;
 
   /// \brief TaskRunner's init callback
@@ -128,7 +128,6 @@ class TaskRunner : public framework::Task
   std::shared_ptr<configuration::ConfigurationInterface> mConfigFile; // used in init only
   std::shared_ptr<monitoring::Monitoring> mCollector;
   std::shared_ptr<TaskInterface> mTask;
-  size_t mResetAfterCycles = 0;
   std::shared_ptr<ObjectsManager> mObjectsManager;
   int mRunNumber;
 

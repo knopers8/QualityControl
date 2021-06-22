@@ -58,16 +58,14 @@ using namespace o2::utilities;
 using namespace std::chrono;
 using namespace AliceO2::Common;
 
-TaskRunner::TaskRunner(const std::string& taskName, const std::string& configurationSource, size_t id)
-  : mDeviceName(createTaskRunnerIdString() + "-" + taskName),
+TaskRunner::TaskRunner(const TaskConfig& config)
+  : mDeviceName(createTaskRunnerIdString() + "-" + config.taskName),
     mRunNumber(0),
-    mMonitorObjectsSpec({ "mo" }, createTaskDataOrigin(), createTaskDataDescription(taskName), id)
+    mMonitorObjectsSpec({ "mo" }, createTaskDataOrigin(), createTaskDataDescription(config.taskName), config.parallelTaskID)
 {
   // setup configuration
   try {
-    mTaskConfig.taskName = taskName;
-    mTaskConfig.parallelTaskID = id;
-    mConfigFile = ConfigurationFactory::getConfiguration(configurationSource);
+    mConfigFile = ConfigurationFactory::getConfiguration(config.configurationSource);
     loadTopologyConfig();
   } catch (...) {
     // catch the configuration exception and print it to avoid losing it
@@ -145,7 +143,7 @@ void TaskRunner::run(ProcessingContext& pCtx)
 
   if (timerReady) {
     finishCycle(pCtx.outputs());
-    if (mResetAfterCycles > 0 && (mCycleNumber % mResetAfterCycles == 0)) {
+    if (mTaskConfig.resetAfterCycles > 0 && (mCycleNumber % mTaskConfig.resetAfterCycles == 0)) {
       mTask->reset();
     }
     if (mTaskConfig.maxNumberCycles < 0 || mCycleNumber < mTaskConfig.maxNumberCycles) {
@@ -192,11 +190,6 @@ CompletionPolicy::CompletionOp TaskRunner::completionPolicyCallback(o2::framewor
   ILOG(Debug, Trace) << "Action: " << action << ENDM;
 
   return action;
-}
-
-void TaskRunner::setResetAfterCycles(size_t n)
-{
-  mResetAfterCycles = n;
 }
 
 std::string TaskRunner::createTaskRunnerIdString()

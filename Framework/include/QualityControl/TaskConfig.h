@@ -18,9 +18,13 @@
 
 #include <string>
 #include <unordered_map>
+#include <optional>
 
 namespace o2::quality_control::core
 {
+
+struct GlobalConfig;
+struct TaskSpec;
 
 /// \brief  Container for the configuration of a Task
 struct TaskConfig {
@@ -30,11 +34,16 @@ struct TaskConfig {
   int cycleDurationSeconds;
   int maxNumberCycles;
   std::string consulUrl;
-  std::string conditionUrl = "";
+  std::string conditionUrl;
   std::unordered_map<std::string, std::string> customParameters = {};
   std::string detectorName = "MISC"; // intended to be the 3 letters code
   int parallelTaskID = 0;            // ID to differentiate parallel local Tasks from one another. 0 means this is the only one.
-  std::string saveToFile = "";
+  std::string saveToFile;
+  int resetAfterCycles = 0;
+  std::string configurationSource;
+
+  // todo it could be moved to a separate class with similar methods
+  static TaskConfig from(const GlobalConfig&, const TaskSpec&, std::optional<int> id = std::nullopt, std::optional<int> resetAfterCycles = std::nullopt);
 };
 
 } // namespace o2::quality_control::core
