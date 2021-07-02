@@ -18,9 +18,7 @@
 ///
 
 #include <string>
-#include <unordered_map>
 #include <vector>
-#include <boost/property_tree/ptree_fwd.hpp>
 
 #include "QualityControl/DataSourceSpec.h"
 
@@ -31,12 +29,6 @@ enum class TaskLocationSpec
   Local,
   Remote
 };
-
-static std::unordered_map<std::string, TaskLocationSpec> const gTaskLocationFromString = {
-  { "local",  TaskLocationSpec::Local },
-  { "remote", TaskLocationSpec::Remote }
-};
-
 
 /// \brief Specification of a Task, which should map the JSON configuration structure.
 struct TaskSpec

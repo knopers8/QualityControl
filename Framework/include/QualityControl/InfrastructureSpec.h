@@ -16,7 +16,7 @@
 /// \author Piotr Konopka
 ///
 
-#include "QualityControl/GlobalConfig.h"
+#include "QualityControl/CommonSpec.h"
 #include "QualityControl/TaskSpec.h"
 
 #include <vector>
@@ -25,7 +25,7 @@ namespace o2::quality_control::core {
 
 struct InfrastructureSpec
 {
-  GlobalConfig global;
+  CommonSpec common;
   std::vector<TaskSpec> tasks;
   // todo: add other actors
 };

@@ -20,6 +20,8 @@
 #include <vector>
 
 #include <Framework/DataProcessorSpec.h>
+#include "QualityControl/CommonSpec.h"
+#include "QualityControl/TaskSpec.h"
 
 namespace o2::framework
 {
@@ -29,7 +31,7 @@ class CompletionPolicy;
 namespace o2::quality_control::core
 {
 
-struct TaskConfig;
+struct TaskRunnerConfig;
 
 /// \brief Factory in charge of creating DataProcessorSpec of QC task
 class TaskRunnerFactory
@@ -38,10 +40,13 @@ class TaskRunnerFactory
   TaskRunnerFactory() = default;
   virtual ~TaskRunnerFactory() = default;
 
-  /// \brief Creator of tasks
+  /// \brief Creates TaskRunner
   ///
   /// \param taskConfig
-  static o2::framework::DataProcessorSpec create(const TaskConfig&);
+  static o2::framework::DataProcessorSpec create(const TaskRunnerConfig&);
+
+  /// \brief Knows how to create TaskConfig from Specs
+  static TaskRunnerConfig extractConfig(const CommonSpec&, const TaskSpec&, std::optional<int> id = std::nullopt, std::optional<int> resetAfterCycles = std::nullopt);
 
   /// \brief Provides necessary customization of the TaskRunners.
   ///

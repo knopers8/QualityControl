@@ -19,6 +19,7 @@
 #include <string>
 #include <unordered_map>
 #include <Framework/InputSpec.h>
+#include <type_traits>
 
 namespace o2::quality_control::core {
 
@@ -39,12 +40,16 @@ struct DataSourceSpec
 {
   explicit DataSourceSpec(DataSourceType type = DataSourceType::Invalid, std::unordered_map<std::string, std::string> params = {});
 
-  // fixme very dumb polymorphism, i am not sure yet about it, e.g. because it won't support arrays (which are used e.g. to list MOs for a Check).
+  // todo: use c++20 concepts when available
+  template<class... Args, class Enable = std::enable_if_t<(... && std::is_convertible_v<Args, DataSourceType>)>>
+  bool isOneOf(Args... dataSourceType) const {
+    return (... || (dataSourceType == type));
+  }
+
   DataSourceType type;
   std::unordered_map<std::string, std::string> typeSpecificParams;
+  std::vector<framework::InputSpec> inputs;
 
-  // todo. this should be useful for handling different data sources in a concise way.
-  static std::vector<framework::InputSpec> inputSpecsFor(const DataSourceSpec& dataSourceSpec);
 };
 
 }

@@ -133,7 +133,7 @@ class TestTask : public TaskInterface
 BOOST_AUTO_TEST_CASE(test_invoke_all_methods)
 {
   // This is maximum that we can do until we are able to test the DPL algorithms in isolation.
-  TaskConfig taskConfig;
+  TaskRunnerConfig taskConfig;
   ObjectsManager* objectsManager = new ObjectsManager(taskConfig.taskName, taskConfig.detectorName, taskConfig.consulUrl, 0, true);
 
   test::TestTask testTask(objectsManager);
@@ -168,7 +168,8 @@ BOOST_AUTO_TEST_CASE(test_invoke_all_methods)
 
 BOOST_AUTO_TEST_CASE(test_task_factory)
 {
-  TaskConfig config{
+  TaskRunnerConfig config{
+    "SkeletonTaskRunner",
     "skeletonTask",
     "QcSkeleton",
     "o2::quality_control_modules::skeleton::SkeletonTask",
@@ -199,7 +200,7 @@ BOOST_AUTO_TEST_CASE(retrieveCondition)
   api.storeAsTFileAny<o2::emcal::BadChannelMap>(&bad, "qc/TST/conditions", meta);
 
   // retrieve it
-  TaskConfig taskConfig;
+  TaskRunnerConfig taskConfig;
   ObjectsManager* objectsManager = new ObjectsManager(taskConfig.taskName, taskConfig.detectorName, taskConfig.consulUrl, 0, true);
   test::TestTask testTask(objectsManager);
   testTask.loadCcdb("ccdb-test.cern.ch:8080");

@@ -18,7 +18,7 @@
 
 #include "QualityControl/InfrastructureSpec.h"
 #include "QualityControl/TaskSpec.h"
-#include "QualityControl/GlobalConfig.h"
+#include "QualityControl/CommonSpec.h"
 #include "QualityControl/DataSourceSpec.h"
 #include <boost/property_tree/ptree_fwd.hpp>
 
@@ -32,12 +32,15 @@ class InfrastructureSpecReader
 {
   public:
   /// \brief Reads the full QC configuration file.
+  // todo remove configurationSource when it is possible
   static InfrastructureSpec readInfrastructureSpec(const boost::property_tree::ptree&, const std::string& configurationSource);
 
   // readers for separate parts
-  static GlobalConfig readGlobalConfig(const boost::property_tree::ptree&, const std::string& configurationSource);
-  static TaskSpec readTaskSpec(std::string taskName, const boost::property_tree::ptree&);
-  static DataSourceSpec readDataSourceSpec(const boost::property_tree::ptree&);
+  static CommonSpec readCommonSpec(const boost::property_tree::ptree& config, const std::string& configurationSource);
+  static TaskSpec readTaskSpec(std::string taskName, const boost::property_tree::ptree& taskSpec, const std::string& configurationSource);
+  static DataSourceSpec readDataSourceSpec(const boost::property_tree::ptree& dataSourceSpec, const std::string& configurationSource);
+
+  static std::string validateDetectorName(std::string name);
 };
 
 }

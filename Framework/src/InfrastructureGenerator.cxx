@@ -58,7 +58,8 @@ framework::WorkflowSpec InfrastructureGenerator::generateStandaloneInfrastructur
   printVersion();
 
   auto config = ConfigurationFactory::getConfiguration(configurationSource);
-  auto infrastructureSpec = InfrastructureSpecReader::readInfrastructureSpec(config->getRecursive());
+  auto infrastructureSpec = InfrastructureSpecReader::readInfrastructureSpec(config->getRecursive(), configurationSource);
+  // todo: report the number of tasks/checks/etc once all are read there.
 
   WorkflowSpec workflow;
 
@@ -67,7 +68,8 @@ framework::WorkflowSpec InfrastructureGenerator::generateStandaloneInfrastructur
       // The "resetAfterCycles" parameters should be handled differently for standalone/remote and local tasks,
       // thus we should not let TaskRunnerFactory read it and decide by itself, since it might not be aware of
       // the context we run QC.
-      workflow.emplace_back(TaskRunnerFactory::create(taskSpec.taskName, configurationSource, taskSpec.resetAfterCycles));
+      auto taskConfig = TaskRunnerFactory::extractConfig(infrastructureSpec.common, taskSpec, 0, taskSpec.resetAfterCycles);
+      workflow.emplace_back(TaskRunnerFactory::create(taskConfig));
     }
   }
   auto checkRunnerOutputs = generateCheckRunners(workflow, configurationSource);
@@ -88,7 +90,7 @@ WorkflowSpec InfrastructureGenerator::generateLocalInfrastructure(std::string co
   printVersion();
 
   auto config = ConfigurationFactory::getConfiguration(configurationSource);
-  auto infrastructureSpec = InfrastructureSpecReader::readInfrastructureSpec(config->getRecursive());
+  auto infrastructureSpec = InfrastructureSpecReader::readInfrastructureSpec(config->getRecursive(), configurationSource);
 
   WorkflowSpec workflow;
   std::unordered_set<std::string> samplingPoliciesUsed;
@@ -115,9 +117,9 @@ WorkflowSpec InfrastructureGenerator::generateLocalInfrastructure(std::string co
           // If we use delta mergers, then the moving window is implemented by the last Merger layer.
           // The QC Tasks should always send a delta covering one cycle.
           int resetAfterCycles = taskSpec.mergingMode == "delta" ? 1 : (int)taskSpec.resetAfterCycles;
-          auto taskConfig = TaskConfig::from(infrastructureSpec.global, taskSpec, id, resetAfterCycles);
+          auto taskConfig = TaskRunnerFactory::extractConfig(infrastructureSpec.common, taskSpec, id, resetAfterCycles);
           // Generate QC Task Runner
-          workflow.emplace_back(TaskRunnerFactory::create(taskSpec.taskName, configurationSource, id, resetAfterCycles));
+          workflow.emplace_back(TaskRunnerFactory::create(taskConfig));
           // Generate an output proxy
           // These should be removed when we are able to declare dangling output in normal DPL devices
           generateLocalTaskLocalProxy(workflow, id, taskSpec.taskName, taskSpec.remoteMachine, std::to_string(taskSpec.remotePort));
@@ -168,7 +170,7 @@ o2::framework::WorkflowSpec InfrastructureGenerator::generateRemoteInfrastructur
   printVersion();
 
   auto config = ConfigurationFactory::getConfiguration(configurationSource);
-  auto infrastructureSpec = InfrastructureSpecReader::readInfrastructureSpec(config->getRecursive());
+  auto infrastructureSpec = InfrastructureSpecReader::readInfrastructureSpec(config->getRecursive(), configurationSource);
 
   WorkflowSpec workflow;
   std::unordered_set<std::string> samplingPoliciesUsed;
@@ -214,7 +216,8 @@ o2::framework::WorkflowSpec InfrastructureGenerator::generateRemoteInfrastructur
       }
 
       // Creating the remote task
-      workflow.emplace_back(TaskRunnerFactory::create(taskSpec.taskName, configurationSource, taskSpec.resetAfterCycles));
+      auto taskConfig = TaskRunnerFactory::extractConfig(infrastructureSpec.common, taskSpec, 0, taskSpec.resetAfterCycles);
+      workflow.emplace_back(TaskRunnerFactory::create(taskConfig));
     }
   }
 
@@ -365,7 +368,8 @@ void InfrastructureGenerator::generateMergers(framework::WorkflowSpec& workflow,
   // if we are to change the mode to Full, disable reseting tasks after each cycle.
   mergerConfig.inputObjectTimespan = { (mergingMode.empty() || mergingMode == "delta") ? InputObjectsTimespan::LastDifference : InputObjectsTimespan::FullHistory };
   mergerConfig.publicationDecision = { PublicationDecision::EachNSeconds, cycleDurationSeconds };
-  mergerConfig.mergedObjectTimespan = { MergedObjectTimespan::NCycles, (int)resetAfterCycles };
+  (void)resetAfterCycles; // todo remove
+//  mergerConfig.mergedObjectTimespan = { MergedObjectTimespan::NCycles, (int)resetAfterCycles }; todo: uncomment after PR to O2 is merged
   // for now one merger should be enough, multiple layers to be supported later
   mergerConfig.topologySize = { TopologySize::NumberOfLayers, 1 };
   mergersBuilder.setConfig(mergerConfig);

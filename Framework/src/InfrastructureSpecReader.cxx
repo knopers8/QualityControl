@@ -16,32 +16,42 @@
 #include "QualityControl/InfrastructureSpecReader.h"
 #include "QualityControl/QcInfoLogger.h"
 
+#include <DataSampling/DataSampling.h>
+#include <Framework/DataDescriptorQueryBuilder.h>
 #include <boost/property_tree/ptree.hpp>
+
+using namespace o2::utilities;
+using namespace o2::framework;
 
 namespace o2::quality_control::core {
 
 InfrastructureSpec InfrastructureSpecReader::readInfrastructureSpec(const boost::property_tree::ptree& config, const std::string& configurationSource)
 {
   InfrastructureSpec spec;
-  spec.global = readGlobalConfig(config.get_child("config"));
-  if (config.count("tasks") > 0) {
-    const auto& tasksConfig = config.get_child("tasks");
-    spec.tasks.reserve(tasksConfig.size());
-    for (const auto& [taskName, taskConfig] : tasksConfig) {
-      spec.tasks.push_back(readTaskSpec(taskName, taskConfig));
+  const auto& qcTree = config.get_child("qc");
+  if (qcTree.find("config") != qcTree.not_found()) {
+    spec.common = readCommonSpec(qcTree.get_child("config"), configurationSource);
+  } else {
+    ILOG(Error) << "The \"config\" section in the provided QC config file is missing." << ENDM;
+  }
+  if (qcTree.find("tasks") != qcTree.not_found()) {
+    const auto& tasksTree = qcTree.get_child("tasks");
+    spec.tasks.reserve(tasksTree.size());
+    for (const auto& [taskName, taskConfig] : tasksTree) {
+      spec.tasks.push_back(readTaskSpec(taskName, taskConfig, configurationSource));
     }
   }
-  return {};
+  return spec;
 }
 
-GlobalConfig InfrastructureSpecReader::readGlobalConfig(const boost::property_tree::ptree& config, const std::string& configurationSource)
+CommonSpec InfrastructureSpecReader::readCommonSpec(const boost::property_tree::ptree& config, const std::string& configurationSource)
 {
-  GlobalConfig gc;
+  CommonSpec gc;
   for (const auto&[key, value] : config.get_child("database")) {
     gc.database.emplace(key, value.get_value<std::string>());
   }
-  gc.activityNumber = config.get<size_t>("Activity.number", gc.activityNumber);
-  gc.activityType = config.get<std::string>("Activity.type", gc.activityType);
+  gc.activityNumber = config.get<int>("Activity.number", gc.activityNumber);
+  gc.activityType = config.get<int>("Activity.type", gc.activityType);
   gc.monitoringUrl = config.get<std::string>("monitoring.url", gc.monitoringUrl);
   gc.consulUrl = config.get<std::string>("consul.url", gc.consulUrl);
   gc.conditionDBUrl = config.get<std::string>("conditionDB.url", gc.conditionDBUrl);
@@ -54,8 +64,13 @@ GlobalConfig InfrastructureSpecReader::readGlobalConfig(const boost::property_tr
 }
 
 
-TaskSpec InfrastructureSpecReader::readTaskSpec(std::string taskName, const boost::property_tree::ptree& config)
+TaskSpec InfrastructureSpecReader::readTaskSpec(std::string taskName, const boost::property_tree::ptree& config, const std::string& configurationSource)
 {
+  static std::unordered_map<std::string, TaskLocationSpec> const taskLocationFromString = {
+    { "local",  TaskLocationSpec::Local },
+    { "remote", TaskLocationSpec::Remote }
+  };
+
   TaskSpec ts;
 
   ts.taskName = taskName;
@@ -63,7 +78,7 @@ TaskSpec InfrastructureSpecReader::readTaskSpec(std::string taskName, const boos
   ts.moduleName = config.get<std::string>("moduleName");
   ts.detectorName = config.get<std::string>("detectorName");
   ts.cycleDurationSeconds = config.get<int>("cycleDurationSeconds");
-  ts.dataSource = readDataSourceSpec(config.get_child("dataSource"));
+  ts.dataSource = readDataSourceSpec(config.get_child("dataSource"), configurationSource);
 
   ts.active = config.get<bool>("active", ts.active);
   ts.maxNumberCycles = config.get<int>("maxNumberCycles", ts.maxNumberCycles);
@@ -76,21 +91,21 @@ TaskSpec InfrastructureSpecReader::readTaskSpec(std::string taskName, const boos
   }
 
   bool multinodeSetup = config.find("location") != config.not_found();
-  ts.location = gTaskLocationFromString.at(config.get<std::string>("location", "remote"));
+  ts.location = taskLocationFromString.at(config.get<std::string>("location", "remote"));
   if (config.count("localMachines") > 0) {
     for (const auto&[key, value] : config.get_child("localMachines")) {
       ts.localMachines.emplace_back(value.get_value<std::string>());
     }
   }
   if (multinodeSetup && config.count("remoteMachine") > 0) {
-    ILOG(Warning, Devel)
+    ILOG(Warning, Trace)
       << "No remote machine was specified for a multinode QC setup."
          " This is fine if running with AliECS, but it will fail in standalone mode."
       << ENDM;
   }
   ts.remoteMachine = config.get<std::string>("remoteMachine", ts.remoteMachine);
   if (multinodeSetup && config.count("remotePort") > 0) {
-    ILOG(Warning, Devel)
+    ILOG(Warning, Trace)
       << "No remote port was specified for a multinode QC setup."
          " This is fine if running with AliECS, but it might fail in standalone mode."
       << ENDM;
@@ -99,10 +114,11 @@ TaskSpec InfrastructureSpecReader::readTaskSpec(std::string taskName, const boos
   ts.mergingMode = config.get<std::string>("mergingMode", ts.mergingMode);
   ts.mergerCycleMultiplier = config.get<int>("mergerCycleMultiplier", ts.mergerCycleMultiplier);
 
-  return {};
+  return ts;
 }
 
-static DataSourceSpec readDataSourceSpec(const boost::property_tree::ptree& config)
+DataSourceSpec InfrastructureSpecReader::readDataSourceSpec(const boost::property_tree::ptree& dataSourceSpec,
+                                                            const std::string& configurationSource)
 {
   static std::unordered_map<std::string, DataSourceType> const dataSourceTypeFromString = {
     // fixme: the convention is inconsistent and it should be fixed in coordination with configuration files
@@ -116,24 +132,30 @@ static DataSourceSpec readDataSourceSpec(const boost::property_tree::ptree& conf
   };
 
   DataSourceSpec dss;
-  dss.type = dataSourceTypeFromString.at(config.get<std::string>("type"));
+  dss.type = dataSourceTypeFromString.at(dataSourceSpec.get<std::string>("type"));
 
   switch (dss.type) {
-    case DataSourceType::DataSamplingPolicy:
-      dss.typeSpecificParams.insert({ "name", config.get<std::string>("name") });
+    case DataSourceType::DataSamplingPolicy: {
+      auto name = dataSourceSpec.get<std::string>("name");
+      dss.typeSpecificParams.insert({ "name", name });
+      dss.inputs = DataSampling::InputSpecsForPolicy(configurationSource, name ); //fixme: add a method which takes a ptree, then i can remove configurationSource
       break;
-    case DataSourceType::Direct:
-      dss.typeSpecificParams.insert({ "query", config.get<std::string>("query") });
+    }
+    case DataSourceType::Direct: {
+      dss.typeSpecificParams.insert({ "query", dataSourceSpec.get<std::string>("query") });
+      auto inputsQuery = dataSourceSpec.get<std::string>("query");
+      dss.inputs = DataDescriptorQueryBuilder::parse(inputsQuery.c_str());
       break;
-    case DataSourceType::Task:
+    }
+    case DataSourceType::Task: // todo all below
     case DataSourceType::PostProcessingTask:
     case DataSourceType::Check:
     case DataSourceType::Aggregator:
-      dss.typeSpecificParams.insert({ "name", config.get<std::string>("name") });
+      dss.typeSpecificParams.insert({ "name", dataSourceSpec.get<std::string>("name") });
       break;
     case DataSourceType::ExternalTask:
-      dss.typeSpecificParams.insert({ "name", config.get<std::string>("name") });
-      dss.typeSpecificParams.insert({ "query", config.get<std::string>("query") });
+      dss.typeSpecificParams.insert({ "name", dataSourceSpec.get<std::string>("name") });
+      dss.typeSpecificParams.insert({ "query", dataSourceSpec.get<std::string>("query") });
       break;
     case DataSourceType::Invalid:
       // todo: throw?
@@ -141,6 +163,31 @@ static DataSourceSpec readDataSourceSpec(const boost::property_tree::ptree& conf
   }
 
   return dss;
+}
+
+std::string InfrastructureSpecReader::validateDetectorName(std::string name)
+{
+  // name must be a detector code from DetID or one of the few allowed general names
+  int nDetectors = 16;
+  const char* detNames[16] = // once we can use DetID, remove this hard-coded list
+    { "ITS", "TPC", "TRD", "TOF", "PHS", "CPV", "EMC", "HMP", "MFT", "MCH", "MID", "ZDC", "FT0", "FV0", "FDD", "ACO" };
+  std::vector<std::string> permitted = { "MISC", "DAQ", "GENERAL", "TST", "BMK", "CTP", "TRG", "DCS", "REC" };
+  for (auto i = 0; i < nDetectors; i++) {
+    permitted.emplace_back(detNames[i]);
+    //    permitted.push_back(o2::detectors::DetID::getName(i));
+  }
+  auto it = std::find(permitted.begin(), permitted.end(), name);
+
+  if (it == permitted.end()) {
+    std::string permittedString;
+    for (const auto& i : permitted)
+      permittedString += i + ' ';
+    ILOG(Error, Support) << "Invalid detector name : " << name << "\n"
+                         << "    Placeholder 'MISC' will be used instead\n"
+                         << "    Note: list of permitted detector names :" << permittedString << ENDM;
+    return "MISC";
+  }
+  return name;
 }
 
 }

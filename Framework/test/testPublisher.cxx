@@ -31,7 +31,7 @@ namespace o2::quality_control::core
 
 BOOST_AUTO_TEST_CASE(publisher_test)
 {
-  TaskConfig config;
+  TaskRunnerConfig config;
   config.taskName = "test";
   ObjectsManager objectsManager(config.taskName, config.detectorName, config.consulUrl, 0, true);
   TObjString s("content");

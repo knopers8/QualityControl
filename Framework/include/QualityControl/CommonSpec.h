@@ -8,8 +8,8 @@
 // granted to it by virtue of its status as an Intergovernmental Organization
 // or submit itself to any jurisdiction.
 
-#ifndef QUALITYCONTROL_GLOBALCONFIG_H
-#define QUALITYCONTROL_GLOBALCONFIG_H
+#ifndef QUALITYCONTROL_COMMONSPEC_H
+#define QUALITYCONTROL_COMMONSPEC_H
 
 ///
 /// \file   GlobalConfig.h
@@ -22,16 +22,16 @@
 
 namespace o2::quality_control::core {
 
-struct GlobalConfig {
-  GlobalConfig() = default;
-  GlobalConfig(const boost::property_tree::ptree&);
+struct CommonSpec {
+  CommonSpec() = default;
+//  GlobalConfig(const boost::property_tree::ptree&);
 
   std::unordered_map<std::string, std::string> database;
-  size_t activityNumber;
-  std::string activityType;
-  std::string monitoringUrl;
+  int activityNumber;
+  int activityType;
+  std::string monitoringUrl = "infologger:///debug?qc";
   std::string consulUrl;
-  std::string conditionDBUrl;
+  std::string conditionDBUrl = "http://ccdb-test.cern.ch:8080";
   bool infologgerFilterDiscardDebug = false;
   int infologgerDiscardLevel = 21;
 
@@ -40,4 +40,4 @@ struct GlobalConfig {
 
 }
 
-#endif //QUALITYCONTROL_GLOBALCONFIG_H
+#endif //QUALITYCONTROL_COMMONSPEC_H
