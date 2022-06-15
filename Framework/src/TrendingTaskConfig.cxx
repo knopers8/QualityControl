@@ -33,13 +33,20 @@ TrendingTaskConfig::TrendingTaskConfig(std::string name, const boost::property_t
                       plotConfig.second.get<std::string>("graphErrors", "") });
   }
   for (const auto& dataSourceConfig : config.get_child("qc.postprocessing." + name + ".dataSources")) {
+    std::unordered_map<std::string, std::string> customParameters;
+    if (dataSourceConfig.second.count("reductorParameters") > 0) {
+      for (const auto& [key, value] : dataSourceConfig.second.get_child("reductorParameters")) {
+        customParameters.emplace(key, value.get_value<std::string>());
+      }
+    }
     if (const auto& sourceNames = dataSourceConfig.second.get_child_optional("names"); sourceNames.has_value()) {
       for (const auto& sourceName : sourceNames.value()) {
         dataSources.push_back({ dataSourceConfig.second.get<std::string>("type", "repository"),
                                 dataSourceConfig.second.get<std::string>("path"),
                                 sourceName.second.data(),
                                 dataSourceConfig.second.get<std::string>("reductorName"),
-                                dataSourceConfig.second.get<std::string>("moduleName") });
+                                dataSourceConfig.second.get<std::string>("moduleName"),
+                                customParameters });
       }
     } else if (!dataSourceConfig.second.get<std::string>("name").empty()) {
       // "name" : [ "something" ] would return an empty string here
@@ -47,7 +54,8 @@ TrendingTaskConfig::TrendingTaskConfig(std::string name, const boost::property_t
                               dataSourceConfig.second.get<std::string>("path"),
                               dataSourceConfig.second.get<std::string>("name"),
                               dataSourceConfig.second.get<std::string>("reductorName"),
-                              dataSourceConfig.second.get<std::string>("moduleName") });
+                              dataSourceConfig.second.get<std::string>("moduleName"),
+                              customParameters });
     } else {
       throw std::runtime_error("No 'name' value or a 'names' vector in the path 'qc.postprocessing." + name + ".dataSources'");
     }

@@ -47,6 +47,7 @@ void TrendingTask::initialize(Trigger, framework::ServiceRegistry&)
 
   for (const auto& source : mConfig.dataSources) {
     std::unique_ptr<Reductor> reductor(root_class_factory::create<Reductor>(source.moduleName, source.reductorName));
+    reductor->setCustomParameters(source.customParameters);
     mTrend->Branch(source.name.c_str(), reductor->getBranchAddress(), reductor->getBranchLeafList());
     mReductors[source.name] = std::move(reductor);
   }

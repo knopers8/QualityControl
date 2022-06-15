@@ -46,6 +46,7 @@ struct TrendingTaskConfig : PostProcessingConfig {
     std::string name;
     std::string reductorName;
     std::string moduleName;
+    std::unordered_map<std::string, std::string> customParameters = {};
   };
 
   bool producePlotsOnUpdate;

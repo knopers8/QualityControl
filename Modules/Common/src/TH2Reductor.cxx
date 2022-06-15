@@ -22,6 +22,7 @@ namespace o2::quality_control_modules::common
 
 void* TH2Reductor::getBranchAddress()
 {
+  auto exampleParam = std::stoll(mCustomParameters.at("first_bc"));
   return &mStats;
 }
 

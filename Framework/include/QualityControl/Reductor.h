@@ -39,6 +39,11 @@ class Reductor
   /// \brief Fill the data structure with new data
   /// \param An object to be reduced
   virtual void update(TObject* obj) = 0;
+
+  void setCustomParameters(const std::unordered_map<std::string, std::string>& parameters) { mCustomParameters = parameters; }
+
+ protected:
+  std::unordered_map<std::string, std::string> mCustomParameters;
 };
 
 } // namespace o2::quality_control::postprocessing
