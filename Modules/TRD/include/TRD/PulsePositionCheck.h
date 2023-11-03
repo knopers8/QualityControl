@@ -22,8 +22,8 @@
 namespace o2::quality_control_modules::trd
 {
 
-/// \brief  Example QC Check
-/// \author My Name
+/// \brief  Pulse Position TRD Check
+/// \author Deependra
 class PulsePositionCheck : public o2::quality_control::checker::CheckInterface
 {
  public:

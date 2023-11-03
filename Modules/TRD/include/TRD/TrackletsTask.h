@@ -11,7 +11,7 @@
 
 ///
 /// \file   TrackletsTask.h
-/// \author My Name
+/// \author Sean Muray
 ///
 
 #ifndef QC_MODULE_TRD_TRDTRACKLETSTASK_H
@@ -31,8 +31,8 @@ using namespace o2::quality_control::core;
 namespace o2::quality_control_modules::trd
 {
 
-/// \brief Example Quality Control DPL Task
-/// \author My Name
+/// \brief Tracklets TRD QC Task
+/// \author Sean Murray
 class TrackletsTask final : public TaskInterface
 {
  public:

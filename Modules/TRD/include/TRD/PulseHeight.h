@@ -11,7 +11,7 @@
 
 ///
 /// \file   PulseHeight.h
-/// \author My Name
+/// \author Sean Murray
 ///
 
 #ifndef QC_MODULE_TRD_TRDPULSEHEIGHT_H
@@ -33,8 +33,8 @@ using namespace o2::quality_control::core;
 namespace o2::quality_control_modules::trd
 {
 
-/// \brief Example Quality Control DPL Task
-/// \author My Name
+/// \brief PulseHeight TRD Task
+/// \author Sean Murray
 class PulseHeight final : public TaskInterface
 {
  public:

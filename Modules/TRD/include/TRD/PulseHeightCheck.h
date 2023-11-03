@@ -11,7 +11,7 @@
 
 ///
 /// \file   PulseHeightCheck.h
-/// \author My Name
+/// \author Sean Murray
 ///
 
 #ifndef QC_MODULE_TRD_TRDPULSEHEIGHTCHECK_H
@@ -23,8 +23,8 @@
 namespace o2::quality_control_modules::trd
 {
 
-/// \brief  Example QC Check
-/// \author My Name
+/// \brief  Pulse Height TRD Check
+/// \author Sean Murray
 class PulseHeightCheck : public o2::quality_control::checker::CheckInterface
 {
  public:

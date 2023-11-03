@@ -11,7 +11,7 @@
 
 ///
 /// \file   RawData.h
-/// \author My Name
+/// \author Sean Murray
 ///
 
 #ifndef QC_MODULE_TRD_TRDRAWDATA_H

@@ -1,6 +1,6 @@
 ///
 /// \file   DigitsCheck.h
-/// \author My Name
+/// \author Tmtetwa
 ///
 
 #ifndef QC_MODULE_TRD_DIGITSCHECK_H
@@ -15,7 +15,7 @@ namespace o2::quality_control_modules::trd
 {
 
 /// \brief  TRD Check
-/// \author My Name
+/// \author Tmtetwa
 class DigitsCheck : public o2::quality_control::checker::CheckInterface
 {
  public:

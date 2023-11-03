@@ -11,7 +11,7 @@
 
 ///
 /// \file   TrendingTaskConfigTRD.h
-/// \author          based on  Piotr Konopkan work
+/// \author Nasir Malik
 ///
 
 #ifndef QUALITYCONTROL_TRENDINGTASKCONFIGTRD_H

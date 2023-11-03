@@ -11,7 +11,7 @@
 
 ///
 /// \file   TrendingTaskConfigTRD.cxx
-/// \author        based on Piotr Konopka work
+/// \author Nasir Malik
 ///
 
 #include "TRD/TrendingTaskConfigTRD.h"

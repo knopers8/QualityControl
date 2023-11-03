@@ -45,6 +45,7 @@ void PulseHeightCheck::configure()
     mTimeStamp = o2::ccdb::getCurrentTimestamp();
     ILOG(Debug, Support) << "configure() : using default timestam of now = " << mTimeStamp << ENDM;
   }
+  // fixme: use UserTaskInterface::retrieveConditionAny
   auto& mgr = o2::ccdb::BasicCCDBManager::instance();
   mgr.setTimestamp(mTimeStamp);
   ILOG(Debug, Devel) << "initialize PulseHeight" << ENDM; // QcInfoLogger is used. FairMQ logs will go to there as well.

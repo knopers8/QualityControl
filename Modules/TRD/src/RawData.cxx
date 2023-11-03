@@ -185,8 +185,6 @@ void RawData::initialize(o2::framework::InitContext& /*ctx*/)
 
   buildHistograms();
   ILOG(Info, Support) << "TRD RawData QC histograms built" << ENDM;
-
-  // ILOG(Warning, Support) << "Metadata could not be added to " << mHistogram->GetName() << ENDM;
 }
 
 void RawData::startOfActivity(const Activity& activity)

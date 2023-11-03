@@ -11,7 +11,7 @@
 
 ///
 /// \file   TrackletsCheck.h
-/// \author My Name
+/// \author Sean Murray
 ///
 
 #ifndef QC_MODULE_TRD_TRDTRACKLETSCHECK_H
@@ -24,8 +24,8 @@
 namespace o2::quality_control_modules::trd
 {
 
-/// \brief  Example QC Check
-/// \author My Name
+/// \brief  Tracklets TRD QC Check
+/// \author Sean Murray
 class TrackletsCheck : public o2::quality_control::checker::CheckInterface
 {
  public:

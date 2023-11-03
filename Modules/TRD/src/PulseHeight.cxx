@@ -11,7 +11,7 @@
 
 ///
 /// \file   PulseHeight.cxx
-/// \author My Name
+/// \author Sean Murray
 ///
 
 #include <TCanvas.h>
@@ -50,6 +50,7 @@ void PulseHeight::retrieveCCDBSettings()
     mTimestamp = o2::ccdb::getCurrentTimestamp();
     ILOG(Debug, Support) << "configure() : using default timestam of now = " << mTimestamp << ENDM;
   }
+  // fixme: use UserTaskInterface::retrieveConditionAny or DPL CCDB inputs if possible
   auto& mgr = o2::ccdb::BasicCCDBManager::instance();
   mgr.setTimestamp(mTimestamp);
   mNoiseMap = mgr.get<o2::trd::NoiseStatusMCM>("/TRD/Calib/NoiseMapMCM");

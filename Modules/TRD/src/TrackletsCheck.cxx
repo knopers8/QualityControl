@@ -41,6 +41,7 @@ void TrackletsCheck::retrieveCCDBSettings()
     mTimestamp = o2::ccdb::getCurrentTimestamp();
     ILOG(Debug, Support) << "configure() : using default timestam of now = " << mTimestamp << ENDM;
   }
+  // fixme: use UserTaskInterface::retrieveConditionAny
   auto& mgr = o2::ccdb::BasicCCDBManager::instance();
   mgr.setTimestamp(mTimestamp);
   if (auto param = mCustomParameters.find("integralthreshold"); param != mCustomParameters.end()) {

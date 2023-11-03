@@ -11,7 +11,7 @@
 
 ///
 /// \file    TRDTrending.h
-/// \author    based on  Piotr Konopka work
+/// \author  Nasir Malik
 ///
 
 #ifndef QUALITYCONTROL_TRDTRENDING_H

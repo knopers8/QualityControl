@@ -25,7 +25,6 @@
 #include <TPaveText.h>
 
 #include <DataFormatsQualityControl/FlagReasons.h>
-#include <CCDB/BasicCCDBManager.h>
 
 using namespace std;
 using namespace o2::quality_control;

@@ -1,6 +1,6 @@
 ///
 /// \file   DigitsCheck.cxx
-/// \author My Name
+/// \author Tmtetwa
 ///
 
 #include "TRD/DigitsCheck.h"

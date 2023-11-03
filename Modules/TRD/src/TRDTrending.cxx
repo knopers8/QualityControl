@@ -12,7 +12,7 @@
 
 ///
 /// \file TRDTrending.cxx
-/// \author      based on Piotr Konopka
+/// \author Nasir Malik
 ///
 
 #include "TRD/TRDTrending.h"

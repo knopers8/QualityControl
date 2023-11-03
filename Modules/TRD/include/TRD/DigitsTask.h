@@ -11,7 +11,7 @@
 
 ///
 /// \file   TRDDigitQcTask.h
-/// \author My Name
+/// \author Tmtetwa
 ///
 
 #ifndef QC_MODULE_TRD_DIGITSTASK_H
@@ -34,8 +34,8 @@ using namespace o2::quality_control::core;
 namespace o2::quality_control_modules::trd
 {
 
-/// \brief Example Quality Control DPL Task
-/// \author My Name
+/// \brief TRD Digits Task
+/// \author Tmtetwa
 class DigitsTask final : public TaskInterface
 {
 

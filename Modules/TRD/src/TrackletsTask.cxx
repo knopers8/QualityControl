@@ -108,6 +108,7 @@ void TrackletsTask::drawTrdLayersGrid(TH2F* hist)
 
 void TrackletsTask::retrieveCCDBSettings()
 {
+  // fixme: use UserTaskInterface::retrieveConditionAny or DPL CCDB inputs if possible
   if (auto param = mCustomParameters.find("ccdbtimestamp"); param != mCustomParameters.end()) {
     mTimestamp = std::stol(mCustomParameters["ccdbtimestamp"]);
     ILOG(Debug, Support) << "configure() : using ccdbtimestamp = " << mTimestamp << ENDM;
