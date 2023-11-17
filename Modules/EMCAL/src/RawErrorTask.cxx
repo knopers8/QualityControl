@@ -10,7 +10,8 @@
 
 ///
 /// \file   RawErrorTask.cxx
-/// \author My Name
+/// \author Cristina Terrevoli
+/// \author Markus Fasel
 ///
 
 #include <TCanvas.h>
@@ -213,7 +214,7 @@ void RawErrorTask::monitorData(o2::framework::ProcessingContext& ctx)
   int firstEntry = 0;
   for (const auto& rawErrorData : framework::InputRecordWalker(ctx.inputs(), filter)) {
     auto errorcont = o2::framework::DataRefUtils::as<o2::emcal::ErrorTypeFEE>(rawErrorData); // read error message
-    LOG(debug) << "Received " << errorcont.size() << " errors";
+    LOG(debug) << "Received " << errorcont.size() << " errors"; // why mix LOG and ILOG?
     for (auto& error : errorcont) {
       auto feeid = error.getFEEID();
       if (error.getErrorType() != o2::emcal::ErrorTypeFEE::ErrorSource_t::GAIN_ERROR || !mExcludeGainErrorsFromOverview)

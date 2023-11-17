@@ -11,7 +11,7 @@
 
 ///
 /// \file   BCTask.cxx
-/// \author My Name
+/// \author Markus Fasel
 ///
 
 #include <TCanvas.h>

@@ -41,7 +41,7 @@ void SupermoduleProjectorTask::configure(const boost::property_tree::ptree& conf
 
 void SupermoduleProjectorTask::initialize(Trigger, framework::ServiceRegistryRef)
 {
-  QcInfoLogger::setDetector("EMC");
+  QcInfoLogger::setDetector("EMC"); // why?
   ILOG(Debug, Devel) << "initialize SuperModuleProjectorTask" << ENDM;
   // create canvas objects for each plot
   for (const auto& datasource : mDataSources) {
@@ -87,6 +87,7 @@ void SupermoduleProjectorTask::reset()
   // clean all the monitor objects here
 
   ILOG(Debug, Support) << "Resetting the histogram" << ENDM;
+  // fixme: it could be implemented to make sure sure START STOP START works as expected
 
 } // namespace o2::quality_control_modules::emcal
 

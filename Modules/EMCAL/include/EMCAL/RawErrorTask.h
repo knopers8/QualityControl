@@ -11,14 +11,13 @@
 ///
 /// \file   RawErrorTask.h
 /// \author Cristina Terrevoli
-//  \author Markus Fasel
+/// \author Markus Fasel
 ///
 
 #ifndef QC_MODULE_EMCAL_EMCALRAWERRORTASK_H
 #define QC_MODULE_EMCAL_EMCALRAWERRORTASK_H
 
 #include "QualityControl/TaskInterface.h"
-#include <array>
 #include <memory>
 #include <string_view>
 
@@ -34,8 +33,9 @@ class MappingHandler;
 namespace o2::quality_control_modules::emcal
 {
 
-/// \brief Example Quality Control DPL Task
-/// \author My Name
+/// \brief Raw Error EMC QC Task
+/// \author Cristina Terrevoli
+/// \author Markus Fasel
 class RawErrorTask final : public TaskInterface
 {
  public:

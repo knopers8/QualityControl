@@ -45,6 +45,9 @@ namespace o2::quality_control_modules::emcal
 
 CellTask::~CellTask()
 {
+  // as documented in https://en.cppreference.com/w/cpp/language/delete, delete has no effect on nullptr,
+  // one could simplify it to "delete mEvCounterTF", etc.
+  // the same applies for other tasks
   auto cleanOptional = [](auto* hist) {
     if (hist) {
       delete hist;

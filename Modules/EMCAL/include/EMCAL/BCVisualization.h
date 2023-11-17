@@ -19,12 +19,9 @@
 
 // QC includes
 #include "QualityControl/PostProcessingInterface.h"
-#include <map>
-#include <memory>
 #include <vector>
 #include <string>
 #include <tuple>
-#include <cfloat>
 
 class TCanvas;
 class TH1;

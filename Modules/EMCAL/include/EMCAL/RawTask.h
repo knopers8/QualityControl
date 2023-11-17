@@ -45,10 +45,9 @@ class Geometry;
 namespace o2::quality_control_modules::emcal
 {
 
-/// \brief Example Quality Control DPL Task
-/// It is final because there is no reason to derive from it. Just remove it if needed.
-/// \author Barthelemy von Haller
-/// \author Piotr Konopka
+/// \brief Raw EMC QC Task
+/// \author Cristina Terrevoli
+/// \author Markus Fasel
 class RawTask final : public TaskInterface
 {
  public:

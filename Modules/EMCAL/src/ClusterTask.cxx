@@ -15,7 +15,6 @@
 ///
 
 #include <boost/algorithm/string.hpp>
-#include <boost/lexical_cast.hpp>
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -28,7 +27,6 @@
 #include "EMCAL/ClusterTask.h"
 #include "QualityControl/QcInfoLogger.h"
 #include <Framework/InputRecord.h>
-#include <Framework/InputRecordWalker.h>
 
 #include <gsl/span>
 
@@ -42,7 +40,6 @@
 #include "EMCALCalib/BadChannelMap.h"
 #include "EMCALCalib/GainCalibrationFactors.h"
 #include "EMCALCalib/TimeCalibrationParams.h"
-#include "Framework/ControlService.h"
 #include "Framework/Logger.h"
 #include <TGeoManager.h>
 

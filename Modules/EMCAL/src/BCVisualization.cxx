@@ -10,7 +10,7 @@
 // or submit itself to any jurisdiction.
 
 ///
-/// \file
+/// \file BCVisualization.cxx
 /// \author Markus Fasel
 ///
 
@@ -77,10 +77,19 @@ void BCVisualization::update(Trigger t, framework::ServiceRegistryRef services)
   auto& qcdb = services.get<quality_control::repository::DatabaseInterface>();
   auto moBCEMC = qcdb.retrieveMO(mDataPath, "BCEMCALReadout", t.timestamp, t.activity),
        moBCCTP = qcdb.retrieveMO(mDataPath, "BCCTPEMCALAny", t.timestamp, t.activity);
+  if (moBCEMC == nullptr || moBCCTP == nullptr) {
+    ILOG(Error, Support) << "could not retrieve BCEMC or BCCTP, will not update the visualization" << ENDM;
+    return;
+  }
   mOutputCanvas->Clear();
   mOutputCanvas->cd();
-  auto histBCEMC = static_cast<TH1*>(moBCEMC->getObject()->Clone()),
-       histBCCTP = static_cast<TH1*>(moBCCTP->getObject()->Clone());
+  // fixme: this will probably leak
+  auto histBCEMC = dynamic_cast<TH1*>(moBCEMC->getObject()->Clone()),
+       histBCCTP = dynamic_cast<TH1*>(moBCCTP->getObject()->Clone());
+  if (histBCEMC == nullptr || histBCCTP == nullptr) {
+    ILOG(Error, Support) << "could not cast BCEMC or BCCTP to TH1, will not update the visualization" << ENDM;
+    return;
+  }
   histBCEMC->SetDirectory(nullptr);
   histBCCTP->SetDirectory(nullptr);
   double yrange = 1.5 * std::max(histBCCTP->GetBinContent(histBCCTP->GetMaximumBin()), histBCEMC->GetBinContent(histBCEMC->GetMaximumBin()));
