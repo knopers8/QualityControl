@@ -19,15 +19,8 @@
 
 #include "QualityControl/DatabaseInterface.h"
 #include "QualityControl/Quality.h"
-#include <TCanvas.h>
-#include <TH1F.h>
-#include <TH2F.h>
-#include <TGraph.h>
-#include <TLegend.h>
-#include <TText.h>
 #include <gsl/span>
 #include <utility>
-#include <optional>
 
 using namespace o2::quality_control::core;
 

@@ -17,7 +17,6 @@
 #ifndef QC_MODULE_HMPID_HMPIDTASKMATCHES_H
 #define QC_MODULE_HMPID_HMPIDTASKMATCHES_H
 
-#include <Framework/InputRecord.h>
 #include "QualityControl/TaskInterface.h"
 
 #include "DataFormatsGlobalTracking/RecoContainer.h"

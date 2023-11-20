@@ -16,8 +16,8 @@
 
 #include "HMPID/HmpidRawChecks.h"
 
+#include "HMPID/Helpers.h"
 // ROOT
-#include <fairlogger/Logger.h>
 #include <TH1.h>
 #include <TH2.h>
 #include <TProfile.h>
@@ -27,10 +27,11 @@
 #include <TMath.h>
 #include <TLine.h>
 #include <TPaveText.h>
+#include <TLegend.h>
+#include <TGraph.h>
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <TIterator.h>
 
 using namespace std;
 

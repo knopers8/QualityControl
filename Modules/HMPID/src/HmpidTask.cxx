@@ -59,11 +59,6 @@ void HmpidTask::initialize(o2::framework::InitContext& /*ctx*/)
 {
   ILOG(Debug, Devel) << "initialize HmpidTask" << ENDM; // QcInfoLogger is used. FairMQ logs will go to there as well.
 
-  // this is how to get access to custom parameters defined in the config file at qc.tasks.<task_name>.taskParameters
-  if (auto param = mCustomParameters.find("myOwnKey"); param != mCustomParameters.end()) {
-    ILOG(Info, Support) << "Custom parameter - myOwnKey: " << param->second << ENDM;
-  }
-
   hPedestalMean = new TH1F("hPedestalMean", "Pedestal Mean", 2000, 0, 2000);
   hPedestalMean->SetXTitle("Pedestal mean (ADC channel)");
   hPedestalMean->SetYTitle("Entries/1 ADC");
@@ -81,8 +76,9 @@ void HmpidTask::initialize(o2::framework::InitContext& /*ctx*/)
   hBusyTime->SetMarkerColor(kBlack);
   hBusyTime->SetLineColor(kBlack);
   hBusyTime->SetFillStyle(3004);
-  for (Int_t iddl = 0; iddl < 14; iddl++)
+  for (Int_t iddl = 0; iddl < 14; iddl++) {
     hBusyTime->GetXaxis()->SetBinLabel(iddl + 1, Form("%d", iddl + 1));
+  }
   hBusyTime->SetStats(0);
   hBusyTime->GetXaxis()->SetLabelSize(0.025);
   hBusyTime->GetYaxis()->SetLabelSize(0.025);
@@ -234,9 +230,7 @@ void HmpidTask::monitorData(o2::framework::ProcessingContext& ctx)
   mDecoder->setVerbosity(2); // this is for Debug
                              //  static const Int_t numCham = 7;
 
-  // for (auto&& input : ctx.inputs()) {
   for (auto&& input : o2::framework::InputRecordWalker(ctx.inputs())) {
-    // get message header
     if (input.header != nullptr && input.payload != nullptr) {
       auto payloadSize = o2::framework::DataRefUtils::getPayloadSize(input);
       int32_t* ptrToPayload = (int32_t*)(input.payload);
@@ -285,18 +279,6 @@ void HmpidTask::monitorData(o2::framework::ProcessingContext& ctx)
           }
         }
       }
-
-      /* Access the pads
-      uint16_t   decoder.theEquipments[0..13]->padSamples[0..23][0..9][0..47]  Number of samples
-      float      decoder.theEquipments[0..13]->padSum[0..23][0..9][0..47]      Sum of the charge of all samples
-      float      decoder.theEquipments[0..13]->padSquares[0..23][0..9][0..47]  Sum of the charge squares of all samples
-      uint16_t GetChannelSamples(int Equipment, int Column, int Dilogic, int Channel);
-      float GetChannelSum(int Equipment, int Column, int Dilogic, int Channel);
-      float GetChannelSquare(int Equipment, int Column, int Dilogic, int Channel);
-      uint16_t GetPadSamples(int Module, int Column, int Row);
-      float GetPadSum(int Module, int Column, int Row);
-      float GetPadSquares(int Module, int Column, int Row);
-      */
     }
   }
 }

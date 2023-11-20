@@ -21,7 +21,6 @@
 #define QC_MODULE_HMPID_HMPIDHMPIDTASK_H
 
 #include "QualityControl/TaskInterface.h"
-#include "HMPIDReconstruction/HmpidDecoder2.h"
 
 class TH1F;
 class TH2F;
@@ -29,13 +28,17 @@ class TProfile;
 class TProfile2D;
 class TCanvas;
 
+namespace o2::hmpid
+{
+class HmpidDecoder2;
+}
 using namespace o2::quality_control::core;
 
 namespace o2::quality_control_modules::hmpid
 {
 
-/// \brief Example Quality Control DPL Task
-/// \author My Name
+/// \brief HMPID QC Task
+/// \author Antonio Franco, Giacomo Volpe, Antonio Paz
 class HmpidTask final : public TaskInterface
 {
  public:
@@ -62,11 +65,8 @@ class HmpidTask final : public TaskInterface
   TProfile* hEventNumber = nullptr;
   TH2F* hModuleMap[numCham] = { nullptr };
   o2::hmpid::HmpidDecoder2* mDecoder = nullptr;
-  // TH2F *hHmpBigMap = nullptr;
   TH2F* hHmpHvSectorQ = nullptr;
   TProfile2D* hHmpBigMap_profile = nullptr;
-  // TProfile2D *hHmpHvSectorQ_profile = nullptr;
-  // TH2F *hHmpHvSectorQ_profile_temp = nullptr;
   TProfile* hHmpPadOccPrf = nullptr;
   TCanvas* CheckerMessages;
   TH2F* hCheckHV;

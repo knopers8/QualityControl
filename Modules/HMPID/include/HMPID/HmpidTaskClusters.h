@@ -17,14 +17,11 @@
 #ifndef QC_MODULE_HMPID_HMPIDTASKCLUSTERS_H
 #define QC_MODULE_HMPID_HMPIDTASKCLUSTERS_H
 
-#include <Framework/InputRecord.h>
 #include "QualityControl/TaskInterface.h"
-#include <TH1.h>
-#include <TProfile.h>
-#include <TH2.h>
-#include <THnSparse.h>
 
 class TH1F;
+class TH2F;
+class TProfile;
 
 using namespace o2::quality_control::core;
 

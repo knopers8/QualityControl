@@ -17,18 +17,14 @@
 #ifndef QC_MODULE_HMPID_RAWCHECK_H
 #define QC_MODULE_HMPID_RAWCHECK_H
 
-#include "HMPID/Helpers.h"
 #include "QualityControl/CheckInterface.h"
 #include "QualityControl/MonitorObject.h"
 #include "QualityControl/Quality.h"
-#include <TH1.h>
-#include <TH2.h>
-#include <TProfile.h>
-#include <TProfile2D.h>
 #include <string>
-#include <TColor.h>
 
-// using namespace o2::quality_control::core;
+class TH2F;
+class TProfile;
+class TProfile2D;
 
 namespace o2::quality_control_modules::hmpid
 {

@@ -20,7 +20,9 @@
 #include "HMPID/HmpidTaskClusters.h"
 
 #include <sstream>
-#include <TCanvas.h>
+#include <TH1.h>
+#include <TProfile.h>
+#include <TH2.h>
 #include <DataFormatsParameters/GRPObject.h>
 
 #include <Framework/InputRecord.h>

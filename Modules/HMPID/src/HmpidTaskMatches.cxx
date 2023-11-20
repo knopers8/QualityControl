@@ -21,16 +21,11 @@
 #include "QualityControl/QcInfoLogger.h"
 #include "HMPID/HmpidTaskMatches.h"
 #include <Framework/InputRecord.h>
-#include <Framework/InputRecordWalker.h>
-#include <Framework/InputSpec.h>
 #include "GlobalTrackingWorkflowHelpers/InputHelper.h"
-#include "ReconstructionDataFormats/TrackTPCITS.h"
-#include "DataFormatsTPC/TrackTPC.h"
 #include "DataFormatsGlobalTracking/RecoContainerCreateTracksVariadic.h"
 #include "ReconstructionDataFormats/TrackParametrization.h"
 #include "DetectorsBase/Propagator.h"
 
-#include "DataFormatsHMP/Cluster.h"
 #include "ReconstructionDataFormats/MatchInfoHMP.h"
 
 namespace o2::quality_control_modules::hmpid

@@ -15,17 +15,7 @@
 ///
 
 #include "HMPID/Helpers.h"
-#include "QualityControl/MonitorObject.h"
 #include "QualityControl/QualityObject.h"
-#include "QualityControl/ObjectMetadataKeys.h"
-#include <TLine.h>
-#include <TLine.h>
-#include <TText.h>
-#include <TMath.h>
-#include <fmt/format.h>
-#include <iostream>
-#include <limits>
-#include <chrono>
 
 using namespace o2::quality_control;
 using namespace o2::quality_control::core;
@@ -85,17 +75,17 @@ Quality QualityCheckerDDL::getQualityDDL()
     }
   }
   // Count bad links
-  int bad_ddl_counter = 0;
+  int badDdlCounter = 0;
   for (int i = 0; i < mQualityDDL.size(); i++) {
     if (mQualityDDL[i] == Quality::Bad) {
-      bad_ddl_counter++;
+      badDdlCounter++;
     }
   }
   // Find quality
   if (result == Quality::Good) {
-    if (bad_ddl_counter >= mMaxBadDDLForMedium) {
+    if (badDdlCounter >= mMaxBadDDLForMedium) {
       result = Quality::Medium;
-      if (bad_ddl_counter >= mMaxBadDDLForBad) {
+      if (badDdlCounter >= mMaxBadDDLForBad) {
         result = Quality::Bad;
       }
     }
@@ -140,17 +130,17 @@ Quality QualityCheckerHV::getQualityHV()
     }
   }
   // Count bad links
-  int bad_hv_counter = 0;
+  int badHvCounter = 0;
   for (int i = 0; i < mQualityHV.size(); i++) {
     if (mQualityHV[i] == Quality::Bad) {
-      bad_hv_counter++;
+      badHvCounter++;
     }
   }
   // Find quality
   if (result == Quality::Good) {
-    if (bad_hv_counter >= mMaxBadHVForMedium) {
+    if (badHvCounter >= mMaxBadHVForMedium) {
       result = Quality::Medium;
-      if (bad_hv_counter >= mMaxBadHVForBad) {
+      if (badHvCounter >= mMaxBadHVForBad) {
         result = Quality::Bad;
       }
     }
