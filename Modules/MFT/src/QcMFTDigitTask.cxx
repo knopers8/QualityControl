@@ -240,8 +240,9 @@ void QcMFTDigitTask::monitorData(o2::framework::ProcessingContext& ctx)
   mMergerTest->Fill(-1); // To test what happenes with the normalisation when merged.
   // get the digits
   const auto digits = ctx.inputs().get<gsl::span<o2::itsmft::Digit>>("randomdigit");
-  if (digits.size() < 1)
+  if (digits.empty()) {
     return;
+  }
 
   // get the number of rofs
   const auto rofs = ctx.inputs().get<gsl::span<o2::itsmft::ROFRecord>>("digitsrof");
@@ -389,10 +390,11 @@ int QcMFTDigitTask::getIndexChipOccupancyMap(int vectorChipOccupancyMapIndex)
   int vectorOccupancyMapHalf = int(vectorChipOccupancyMapIndex / 2);
 
   int occupancyMapIndex;
-  if (vectorOccupancyMapHalf == 0)
+  if (vectorOccupancyMapHalf == 0) {
     occupancyMapIndex = vectorChipOccupancyMapIndex + mCurrentFLP * 2;
-  else
+  } else {
     occupancyMapIndex = (vectorChipOccupancyMapIndex % 2) + (4 - mCurrentFLP) * 2 + numberOfOccupancyMaps / 2;
+  }
 
   //  fill the array of vector ID for corresponding hit map
   //  (opposite matching)

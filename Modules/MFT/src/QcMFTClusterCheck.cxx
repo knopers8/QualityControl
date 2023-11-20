@@ -45,8 +45,6 @@ namespace o2::quality_control_modules::mft
 
 void QcMFTClusterCheck::configure()
 {
-
-  // this is how to get access to custom parameters defined in the config file at qc.tasks.<task_name>.taskParameters
   if (auto param = mCustomParameters.find("ZoneThresholdMedium"); param != mCustomParameters.end()) {
     ILOG(Info, Support) << "Custom parameter - ZoneThresholdMedium: " << param->second << ENDM;
     mZoneThresholdMedium = stoi(param->second);
@@ -70,6 +68,10 @@ Quality QcMFTClusterCheck::check(std::map<std::string, std::shared_ptr<MonitorOb
 
     if (mo->getName() == "mClusterOccupancy") {
       auto* hChipOccupancy = dynamic_cast<TH1F*>(mo->getObject());
+      if (hChipOccupancy == nullptr) {
+        ILOG(Error, Support) << "could not cast mClusterOccupancy to TH1F" << ENDM;
+        return Quality::Null;
+      }
 
       float den = hChipOccupancy->GetBinContent(0); // normalisation stored in the uderflow bin
 
@@ -158,6 +160,10 @@ void QcMFTClusterCheck::readMaskedChips(std::shared_ptr<MonitorObject> mo)
   map<string, string> headers;
   map<std::string, std::string> filter;
   auto calib = UserCodeInterface::retrieveConditionAny<o2::itsmft::NoiseMap>("MFT/Calib/DeadMap/", filter, timestamp);
+  if (calib == nullptr) {
+    ILOG(Error, Support) << "could not read masked chips" << ENDM;
+    return;
+  }
   for (int i = 0; i < calib->size(); i++) {
     if (calib->isFullChipMasked(i)) {
       mMaskedChips.push_back(i);

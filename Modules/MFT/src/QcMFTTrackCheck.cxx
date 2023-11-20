@@ -16,8 +16,6 @@
 /// \author Diana Maria Krupova
 /// \author Katarina Krizkova Gajdosova
 
-// Fair
-#include <fairlogger/Logger.h>
 // ROOT
 #include <TH1.h>
 // Quality Control

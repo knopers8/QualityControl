@@ -30,8 +30,6 @@
 #include <DataFormatsITSMFT/ROFRecord.h>
 #include <DataFormatsITSMFT/ClusterTopology.h>
 #include <ITSMFTReconstruction/ChipMappingMFT.h>
-#include "CCDB/BasicCCDBManager.h"
-#include "CCDB/CCDBTimeStampUtils.h"
 #include "MFTTracking/IOUtils.h"
 #include "MFTBase/GeometryTGeo.h"
 #include <DetectorsBase/GeometryManager.h>
@@ -65,11 +63,6 @@ QcMFTClusterTask::~QcMFTClusterTask()
 void QcMFTClusterTask::initialize(o2::framework::InitContext& /*ctx*/)
 {
   ILOG(Debug, Devel) << "initialize QcMFTClusterTask" << ENDM; // QcInfoLogger is used. FairMQ logs will go to there as well.
-
-  // this is how to get access to custom parameters defined in the config file at qc.tasks.<task_name>.taskParameters
-  if (auto param = mCustomParameters.find("myOwnKey"); param != mCustomParameters.end()) {
-    ILOG(Info, Support) << "Custom parameter - myOwnKey: " << param->second << ENDM;
-  }
 
   // loading custom parameters
   auto maxClusterROFSize = 5000;
@@ -275,9 +268,9 @@ void QcMFTClusterTask::monitorData(o2::framework::ProcessingContext& ctx)
   const auto clusters = ctx.inputs().get<gsl::span<o2::itsmft::CompClusterExt>>("randomcluster");
   const auto clustersROFs = ctx.inputs().get<gsl::span<o2::itsmft::ROFRecord>>("clustersrof");
 
-  if (clusters.size() < 1)
+  if (clusters.empty()) {
     return;
-
+  }
   // get cluster patterns and iterator
   auto clustersPattern = ctx.inputs().get<gsl::span<unsigned char>>("patterns");
   auto patternIt = clustersPattern.begin();

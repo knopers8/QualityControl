@@ -37,8 +37,6 @@ namespace o2::quality_control_modules::mft
 
 void QcMFTReadoutCheck::configure()
 {
-
-  // this is how to get access to custom parameters defined in the config file at qc.tasks.<task_name>.taskParameters
   if (auto param = mCustomParameters.find("FaultThresholdMedium"); param != mCustomParameters.end()) {
     ILOG(Info, Support) << "Custom parameter - FaultThresholdMedium: " << param->second << ENDM;
     mFaultThresholdMedium = stoi(param->second);
