@@ -15,10 +15,6 @@ target_sources(O2QcTPC PRIVATE src/PID.cxx
                              src/LaserTracks.cxx
                              src/LtrCalibReductor.cxx
                              src/ClusterVisualizer.cxx
-                             src/TrendingTaskTPC.cxx
-                             src/TrendingTaskConfigTPC.cxx
-                             src/TH1ReductorTPC.cxx
-                             src/TH2ReductorTPC.cxx
                              src/CheckForEmptyPads.cxx
                              src/QualityReductorTPC.cxx
                              src/DCSPTemperature.cxx
@@ -113,10 +109,10 @@ endforeach()
 # ---- Executables ----
 
 set(EXE_SRCS
-    run/runTPCQCTrackReader.cxx)
+    )
 
 set(EXE_NAMES
-    o2-qc-run-tpctrackreader)
+    )
 
 list(LENGTH EXE_SRCS count)
 math(EXPR count "${count}-1")

@@ -19,7 +19,6 @@
 
 #include "QualityControl/Reductor.h"
 #include "TPCBase/CalDet.h"
-//#include "CCDB/TObjectWrapper.h"
 
 namespace o2::quality_control_modules::tpc
 {

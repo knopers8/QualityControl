@@ -17,11 +17,6 @@
 #pragma link C++ class o2::quality_control_modules::tpc::ClusterVisualizer + ;
 #pragma link C++ class o2::quality_control_modules::tpc::SliceInfo + ;
 #pragma link C++ class std::vector < o2::quality_control_modules::tpc::SliceInfo> + ;
-#pragma link C++ class o2::quality_control_modules::tpc::TrendingTaskTPC + ;
-#pragma link C++ class o2::quality_control_modules::tpc::TrendingTaskConfigTPC + ;
-#pragma link C++ class o2::quality_control_modules::tpc::ReductorTPC + ;
-#pragma link C++ class o2::quality_control_modules::tpc::TH1ReductorTPC + ;
-#pragma link C++ class o2::quality_control_modules::tpc::TH2ReductorTPC + ;
 #pragma link C++ class o2::quality_control_modules::tpc::CheckForEmptyPads + ;
 #pragma link C++ class o2::quality_control_modules::tpc::SliceInfoQuality + ;
 #pragma link C++ class o2::quality_control_modules::tpc::QualityReductorTPC + ;

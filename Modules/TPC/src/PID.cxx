@@ -14,11 +14,6 @@
 /// \author Jens Wiechula
 ///
 
-// root includes
-#include <TCanvas.h>
-#include <TH1.h>
-#include <TH2.h>
-
 // O2 includes
 #include "Framework/ProcessingContext.h"
 #include "DataFormatsTPC/TrackTPC.h"
