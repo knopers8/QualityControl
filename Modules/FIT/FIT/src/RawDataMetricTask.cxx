@@ -116,8 +116,6 @@ void RawDataMetricTask::monitorData(o2::framework::ProcessingContext& ctx)
 void RawDataMetricTask::endOfCycle()
 {
   ILOG(Debug, Devel) << "endOfCycle" << ENDM;
-  // one has to set num. of entries manually because
-  // default TH1Reductor gets only mean,stddev and entries (no integral)
 }
 
 void RawDataMetricTask::endOfActivity(const Activity& /*activity*/)

@@ -19,8 +19,6 @@
 
 #include "QualityControl/CheckInterface.h"
 
-#include "FV0Base/Constants.h"
-
 namespace o2::quality_control_modules::fv0
 {
 

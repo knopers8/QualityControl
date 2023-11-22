@@ -9,6 +9,8 @@
 // granted to it by virtue of its status as an Intergovernmental Organization
 // or submit itself to any jurisdiction.
 
+/// fixme: not compiled at all, remove it?
+
 ///
 /// \file   ChannelTimeCalibrationCheck.h
 /// \author Milosz Filus

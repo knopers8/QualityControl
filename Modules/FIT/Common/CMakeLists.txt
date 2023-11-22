@@ -5,9 +5,7 @@ set(MODULE_NAME "O2QcFITCommon")
 set(SRCS
   src/HelperCommon.cxx
   src/HelperFIT.cxx
-  src/HelperHist.cxx
   src/HelperLUT.cxx
-  src/DigitSync.cxx
 )
 
 set(HEADERS

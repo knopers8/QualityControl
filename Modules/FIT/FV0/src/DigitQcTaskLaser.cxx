@@ -20,9 +20,9 @@
 #include "TROOT.h"
 
 #include "QualityControl/QcInfoLogger.h"
-#include "DataFormatsFIT/Triggers.h"
-#include "Framework/InputRecord.h"
-#include "DataFormatsFV0/LookUpTable.h"
+#include <DataFormatsFIT/Triggers.h>
+#include <Framework/InputRecord.h>
+#include <DataFormatsFV0/LookUpTable.h>
 
 namespace o2::quality_control_modules::fv0
 {

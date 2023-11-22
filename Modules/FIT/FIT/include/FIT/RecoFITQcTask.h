@@ -28,15 +28,8 @@
 
 #include "QualityControl/TaskInterface.h"
 #include <memory>
-#include <regex>
-#include <set>
-#include <map>
 #include <array>
-#include <type_traits>
-#include <boost/algorithm/string.hpp>
-#include <TH1.h>
 #include <TH2.h>
-#include <TList.h>
 #include <Rtypes.h>
 
 #include "FITCommon/DigitSync.h"
@@ -94,7 +87,6 @@ class RecoFITQcTask final : public TaskInterface
   std::unique_ptr<TH2F> mHistTrgCorrelationFDD_FT0;
   std::unique_ptr<TH2F> mHistTrgCorrelationFDD_FV0;
   std::unique_ptr<TH2F> mHistTrgCorrelationFT0_FV0;
-  // std::unique_ptr<TH2F> mHistTrgCorrelationFDD_FT0_FV0;
   std::array<std::unique_ptr<TH2F>, 5> mHistTrgCorrelationFT0_FDD_FV0;
 };
 

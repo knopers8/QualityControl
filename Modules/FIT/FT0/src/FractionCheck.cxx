@@ -47,8 +47,10 @@ void FractionCheck::configure()
   }
   mUseDeadChannelMap = o2::quality_control_modules::common::getFromConfig<bool>(mCustomParameters, "useDeadChannelMap", false);
   if (mUseDeadChannelMap) {
+    // fixme: is this needed?
     const std::string ccdbUrl = o2::quality_control_modules::common::getFromConfig<std::string>(mCustomParameters, "ccdbUrl", "o2-ccdb.internal");
     setCcdbUrl(ccdbUrl);
+    // fixme: this overshadows a class member, is this intentional?
     const std::string mPathDeadChannelMap = o2::quality_control_modules::common::getFromConfig<std::string>(mCustomParameters, "pathDeadChannelMap", "FT0/Calib/DeadChannelMap");
     mDeadChannelMap = retrieveConditionAny<o2::fit::DeadChannelMap>(mPathDeadChannelMap);
     for (unsigned chId = 0; chId < mDeadChannelMap->map.size(); chId++) {
@@ -122,7 +124,10 @@ void FractionCheck::beautify(std::shared_ptr<MonitorObject> mo, Quality checkRes
 {
   if (mo->getName() == mNameObjectToCheck) {
     auto* h = dynamic_cast<TH1F*>(mo->getObject());
-
+    if (h == nullptr) {
+      ILOG(Warning, Devel) << "Could not cast " << mo->getName() << " to TH1F*, will not beautify" << ENDM;
+      return
+    }
     TPaveText* msg = new TPaveText(0.15, 0.2, 0.85, 0.45, "NDC");
     h->GetListOfFunctions()->Add(msg);
     msg->SetName(Form("%s_msg", mo->GetName()));

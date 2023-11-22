@@ -89,6 +89,7 @@ class DigitQcTask final : public TaskInterface
   int mMinTimeGate = -192;
   int mMaxTimeGate = 192;
 
+  // fixme: this seems to exist in multiple places. use the version from HelperCommon.h?
   template <typename Param_t,
             typename = typename std::enable_if<std::is_floating_point<Param_t>::value ||
                                                std::is_same<std::string, Param_t>::value || (std::is_integral<Param_t>::value && !std::is_same<bool, Param_t>::value)>::type>
@@ -211,6 +212,8 @@ class DigitQcTask final : public TaskInterface
   static const size_t mapSize = 256;
   const std::array<std::vector<double>, mapSize> mHashedBitBinPos;                        // map with bit position for 1 byte trg signal, for 1 Dim hists;
   const std::array<std::vector<std::pair<double, double>>, mapSize> mHashedPairBitBinPos; // map with paired bit position for 1 byte trg signal, for 1 Dim hists;
+
+  // fixme: move to the source file?
   static std::array<std::vector<double>, mapSize> fillHashedBitBinPos()
   {
     std::array<std::vector<double>, mapSize> hashedBitBinPos{};

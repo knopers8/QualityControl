@@ -14,6 +14,7 @@
 /// \author Artur Furs afurs@cern.ch
 ///
 
+// fixme: are the temporary conditions still there, do we need it?
 // \brief Temporary helper
 /// \author Artur Furs afurs@cern.ch
 
@@ -64,6 +65,7 @@ auto getTime(const T& digit) -> std::enable_if_t<!std::is_same<decltype(std::dec
 {
   return digit.mTime;
 }
+// fixme: why we have exactly the same method for both when T.time is int16_t and is not?
 template <typename T>
 auto getTime(const T& digit) -> std::enable_if_t<std::is_same<decltype(std::declval<T>().time), int16_t>::value, const decltype(std::declval<T>().time)&>
 {

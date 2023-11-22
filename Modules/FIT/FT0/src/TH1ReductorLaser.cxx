@@ -11,7 +11,7 @@
 
 ///
 /// \file   TH1ReductorLaser.cxx
-/// \author Piotr Konopka, developed to laser QC by Sandor Lokos
+/// \author Sandor Lokos
 /// (sandor.lokos@cern.ch)
 ///
 

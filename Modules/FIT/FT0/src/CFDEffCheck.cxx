@@ -155,6 +155,10 @@ void CFDEffCheck::beautify(std::shared_ptr<MonitorObject> mo, Quality checkResul
 {
   if (mo->getName() == "CFD_efficiency") {
     auto* h = dynamic_cast<TH1F*>(mo->getObject());
+    if (h == nullptr) {
+      ILOG(Warning, Devel) << "Could not cast " << mo->getName() << " to TH1F*, will not beautify" << ENDM;
+      return;
+    }
 
     TPaveText* msg = new TPaveText(0.15, 0.2, 0.85, 0.45, "NDC");
     h->GetListOfFunctions()->Add(msg);

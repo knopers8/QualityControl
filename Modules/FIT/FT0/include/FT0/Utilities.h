@@ -22,7 +22,6 @@
 #include "DataFormatsFT0/Digit.h"
 #include "DataFormatsFT0/ChannelData.h"
 #include "Rtypes.h"
-#include "TObject.h"
 
 namespace o2::quality_control_modules::ft0
 {

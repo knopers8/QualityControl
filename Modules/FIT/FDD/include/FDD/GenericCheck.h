@@ -44,6 +44,7 @@ class SingleCheck
   };
   bool isActive() { return mIsActive; };
 
+  // fixme: move to source files
   void doCheck(Quality& result, float checkedValue)
   {
     if (!mIsActive)

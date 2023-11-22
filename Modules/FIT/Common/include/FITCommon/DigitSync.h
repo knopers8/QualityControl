@@ -18,11 +18,8 @@
 #define QC_MODULE_FIT_DIGITSYNC_H
 
 #include <map>
-#include <string>
 #include <utility>
-#include <unordered_map>
 #include <type_traits>
-#include <functional>
 #include <bitset>
 #include <array>
 

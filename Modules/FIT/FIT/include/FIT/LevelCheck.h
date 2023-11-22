@@ -17,7 +17,6 @@
 #ifndef QC_MODULE_FIT_LEVELCHECK_H
 #define QC_MODULE_FIT_LEVELCHECK_H
 
-#include <regex>
 #include <numeric>
 #include <set>
 

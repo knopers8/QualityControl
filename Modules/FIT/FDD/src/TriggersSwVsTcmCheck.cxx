@@ -38,6 +38,8 @@ constexpr int kBinTcmOnly = 2;
 
 void TriggersSwVsTcmCheck::configure()
 {
+  // fixme: framework sets the ccdbUrl from qc.config.conditionDB.url, why do you also set it yourself?
+  //  also, you do not seem to be using ccdb at all here
   if (auto param = mCustomParameters.find("ccdbUrl"); param != mCustomParameters.end()) {
     setCcdbUrl(param->second);
     ILOG(Debug, Support) << "configure() : using deadChannelMap from CCDB, configured url = " << param->second << ENDM;

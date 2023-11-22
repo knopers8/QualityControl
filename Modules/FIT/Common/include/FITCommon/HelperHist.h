@@ -18,16 +18,12 @@
 #define QC_MODULE_FIT_FITHELPERHIST_H
 
 #include <map>
-#include <vector>
 #include <string>
 #include <tuple>
 #include <utility>
 #include <memory>
 #include <type_traits>
-#include <regex>
 #include <set>
-
-#include <boost/property_tree/ptree.hpp>
 
 #include "TH1D.h"
 #include "TAxis.h"

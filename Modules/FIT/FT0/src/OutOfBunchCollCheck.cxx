@@ -82,14 +82,14 @@ Quality OutOfBunchCollCheck::check(std::map<std::string, std::shared_ptr<Monitor
       }
     }
   }
-  std::string reason = "";
+  std::string reason;
   if (!integralBcOrbitMap)
     reason = Form("Cannot compute quality due to zero integ in BcOrbitMap");
   if (!metadataFound)
     reason = Form("Cannot compute quality due to missing metadata: %s", metadataKey.c_str());
   if (!hOutOfBunchColl)
     reason = Form("Cannot compute quality due to problem with retieving MO");
-  if (reason != "") {
+  if (!reason.empty()) {
     result.set(Quality::Null);
     result.addReason(FlagReasonFactory::Unknown(), reason);
     ILOG(Warning) << reason << ENDM;

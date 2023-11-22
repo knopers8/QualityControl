@@ -18,14 +18,11 @@
 
 #include "QualityControl/TaskInterface.h"
 #include <memory>
-#include "TH1.h"
-#include "TH2.h"
-#include "TTree.h"
-#include "TFile.h"
-#include "TGraph.h"
-#include "TMultiGraph.h"
-#include "Rtypes.h"
-#include "FV0Calibration/FV0ChannelTimeCalibrationObject.h"
+#include <TH1.h>
+#include <TH2.h>
+#include <TGraph.h>
+#include <Rtypes.h>
+#include <FV0Calibration/FV0ChannelTimeCalibrationObject.h>
 
 using namespace o2::quality_control::core;
 

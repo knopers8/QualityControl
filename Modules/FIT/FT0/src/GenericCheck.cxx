@@ -24,7 +24,6 @@
 #include <TCanvas.h>
 #include <TPaveText.h>
 #include <TMath.h>
-// #include <TLine.h>
 #include <TList.h>
 
 #include <DataFormatsQualityControl/FlagReasons.h>
