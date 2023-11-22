@@ -18,13 +18,9 @@
 #include "QualityControl/QcInfoLogger.h"
 #include "ITS/ITSClusterTask.h"
 
-#include <sstream>
-#include <DataFormatsParameters/GRPObject.h>
 #include <ITSMFTReconstruction/DigitPixelReader.h>
 #include <DataFormatsITSMFT/ROFRecord.h>
 #include <ITSMFTReconstruction/ChipMappingITS.h>
-#include "ITSMFTReconstruction/ClustererParam.h"
-#include "DetectorsCommonDataFormats/DetectorNameConf.h"
 #include "ITStracking/IOUtils.h"
 #include <DataFormatsITSMFT/ClusterTopology.h>
 #include "CCDB/BasicCCDBManager.h"
@@ -132,6 +128,7 @@ void ITSClusterTask::monitorData(o2::framework::ProcessingContext& ctx)
     mGeom->fillMatrixCache(o2::math_utils::bit2Mask(o2::math_utils::TransformType::L2G));
   }
 
+  // fixme: use retrieveConditionAny or DPL input
   if (mTimestamp == -1) { // get dict from ccdb
     mTimestamp = std::stol(o2::quality_control_modules::common::getFromConfig<string>(mCustomParameters, "dicttimestamp", "0"));
     long int ts = mTimestamp ? mTimestamp : ctx.services().get<o2::framework::TimingInfo>().creation;

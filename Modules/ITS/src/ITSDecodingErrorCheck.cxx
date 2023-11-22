@@ -23,7 +23,6 @@
 #include <fairlogger/Logger.h>
 #include <TList.h>
 #include <TH2.h>
-#include <iostream>
 #include "Common/Utils.h"
 
 namespace o2::quality_control_modules::its
@@ -41,17 +40,17 @@ Quality ITSDecodingErrorCheck::check(std::map<std::string, std::shared_ptr<Monit
   }
   std::vector<int> vDecErrorLimits = convertToArray<int>(o2::quality_control_modules::common::getFromConfig<string>(mCustomParameters, "DecLinkErrorLimits", ""));
   if (vDecErrorLimits.size() != o2::itsmft::GBTLinkDecodingStat::NErrorsDefined) {
-    LOG(error) << "Incorrect vector with DecodingError limits, check .json" << ENDM;
+    ILOG(Error) << "Incorrect vector with DecodingError limits, check .json" << ENDM;
     doFlatCheck = true;
   }
   std::vector<float> vDecErrorLimitsRatio = convertToArray<float>(o2::quality_control_modules::common::getFromConfig<string>(mCustomParameters, "DecLinkErrorLimitsRatio", ""));
   if (vDecErrorLimitsRatio.size() != o2::itsmft::GBTLinkDecodingStat::NErrorsDefined) {
-    LOG(error) << "Incorrect vector with DecodingError limits Ratio, check .json" << ENDM;
+    ILOG(Error) << "Incorrect vector with DecodingError limits Ratio, check .json" << ENDM;
     doFlatCheck = true;
   }
   std::vector<int> vDecErrorType = convertToArray<int>(o2::quality_control_modules::common::getFromConfig<string>(mCustomParameters, "DecLinkErrorType", ""));
   if (vDecErrorType.size() != o2::itsmft::GBTLinkDecodingStat::NErrorsDefined) {
-    LOG(error) << "Incorrect vector with DecodingError Type, check .json" << ENDM;
+    ILOG(Error) << "Incorrect vector with DecodingError Type, check .json" << ENDM;
     doFlatCheck = true;
   }
 

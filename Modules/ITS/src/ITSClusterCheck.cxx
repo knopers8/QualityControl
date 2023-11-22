@@ -32,6 +32,26 @@
 namespace o2::quality_control_modules::its
 {
 
+template <typename T>
+std::vector<T> convertToArray(std::string input)
+{
+
+  std::istringstream ss{ input };
+
+  std::vector<T> result;
+  std::string token;
+
+  while (std::getline(ss, token, ',')) {
+
+    if constexpr (std::is_same_v<T, int>) {
+      result.push_back(std::stoi(token));
+    } else if constexpr (std::is_same_v<T, std::string>) {
+      result.push_back(token);
+    }
+  }
+  return result;
+}
+
 Quality ITSClusterCheck::check(std::map<std::string, std::shared_ptr<MonitorObject>>* moMap)
 {
   Quality result = Quality::Null;
@@ -43,6 +63,11 @@ Quality ITSClusterCheck::check(std::map<std::string, std::shared_ptr<MonitorObje
 
     if (iter->second->getName().find("AverageClusterSize") != std::string::npos) {
       auto* h = dynamic_cast<TH2F*>(iter->second->getObject());
+      if (h == nullptr) {
+        ILOG(Error, Support) << "could not cast AverageClusterSize to TH2F*" << ENDM;
+        continue;
+      }
+      // fixme: or cast h to TH2 or TH1 for less risk of mismatching type.
       for (int ilayer = 0; ilayer < NLayer; ilayer++) {
         result.addMetadata(Form("Layer%d", ilayer), "good");
         if (iter->second->getName().find(Form("Layer%d", ilayer)) != std::string::npos && h->GetMaximum() > averageClusterSizeLimit[ilayer]) {

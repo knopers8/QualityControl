@@ -21,19 +21,11 @@
 #define QC_MODULE_ITS_ITSFEETASK_H
 
 #include "QualityControl/TaskInterface.h"
-#include "Headers/RAWDataHeader.h"
-#include "Headers/RDHAny.h"
-#include "DetectorsRaw/RDHUtils.h"
 
 #include <TH1.h>
 #include <TH2.h>
 #include <TH2Poly.h>
-#include "TMath.h"
-#include <TLine.h>
-#include <TText.h>
-#include <TLatex.h>
-#include <TLine.h>
-#include <TLegend.h>
+#include <TMath.h>
 
 class TH2I;
 class TH1I;

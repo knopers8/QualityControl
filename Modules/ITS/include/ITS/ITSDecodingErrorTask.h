@@ -20,9 +20,7 @@
 #include "QualityControl/TaskInterface.h"
 #include "Common/TH1Ratio.h"
 
-#include <TH1.h>
-#include <TH2.h>
-
+class TH1;
 class TH2D;
 class TH1D;
 

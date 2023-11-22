@@ -106,6 +106,7 @@ void ITSTrackTask::monitorData(o2::framework::ProcessingContext& ctx)
     isNewCycle = false;
   }
 
+  // fixme: use DPL CCDB inputs or UserCodeInterface::retrieveConditionAny
   if (mTimestamp == -1) { // get dict from ccdb
     mTimestamp = std::stol(o2::quality_control_modules::common::getFromConfig<string>(mCustomParameters, "dicttimestamp", "0"));
     long int ts = mTimestamp ? mTimestamp : ctx.services().get<o2::framework::TimingInfo>().creation;

@@ -21,8 +21,14 @@
 #include "QualityControl/QcInfoLogger.h"
 #include "Common/Utils.h"
 
+#include <TLine.h>
+#include <TLatex.h>
+
 #include <DPLUtils/RawParser.h>
 #include <DPLUtils/DPLRawParser.h>
+#include <DetectorsRaw/RDHUtils.h>
+#include <Headers/RAWDataHeader.h>
+#include <Headers/RDHAny.h>
 #include <iostream>
 
 using namespace o2::framework;
@@ -685,6 +691,7 @@ void ITSFeeTask::resetLanePlotsAndCounters()
 
 void ITSFeeTask::reset()
 {
+  // why only general plots? for START STOP START to work you should reset all plots.
   resetGeneralPlots();
   ILOG(Debug, Devel) << "Reset" << ENDM;
 }

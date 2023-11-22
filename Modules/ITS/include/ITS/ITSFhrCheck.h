@@ -42,6 +42,7 @@ class ITSFhrCheck : public o2::quality_control::checker::CheckInterface
   Quality check(std::map<std::string, std::shared_ptr<MonitorObject>>* moMap) override;
   void beautify(std::shared_ptr<MonitorObject> mo, Quality checkResult = Quality::Null) override;
   std::string getAcceptedType() override;
+  // move to src or a helper?
   template <typename T>
   std::vector<T> convertToArray(std::string input)
   {
