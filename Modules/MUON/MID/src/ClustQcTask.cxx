@@ -124,19 +124,14 @@ void ClustQcTask::initialize(o2::framework::InitContext& /*ctx*/)
 void ClustQcTask::startOfActivity(const Activity& /*activity*/)
 {
   ILOG(Info, Devel) << "startOfActivity" << ENDM;
-  // printf(" =================== > test startOfActivity Clust \n");
 }
 
 void ClustQcTask::startOfCycle()
 {
-  // ILOG(Info, Devel) << "startOfCycle" << ENDM;
-  // printf(" =================== > test startOfCycle Clust \n");
 }
 
 void ClustQcTask::monitorData(o2::framework::ProcessingContext& ctx)
 {
-  // printf(" =================== > test monitorData Clust \n");
-
   mNbClusterTF->Fill(0.5, 1.);
 
   auto clusters = ctx.inputs().get<gsl::span<o2::mid::Cluster>>("clusters");
