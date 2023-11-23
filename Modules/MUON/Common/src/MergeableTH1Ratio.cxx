@@ -10,9 +10,9 @@
 // or submit itself to any jurisdiction.
 
 /// \file MergeableTH1Ratio.cxx
-/// \brief An example of a custom TH2Quotient inheriting MergeInterface
+/// \brief Mergeable TH1 Ratio inheriting MergeInterface
 ///
-/// \author Piotr Konopka, piotr.jan.konopka@cern.ch, Sebastien Perrin, Andrea Ferrero
+/// \author Sebastien Perrin, Andrea Ferrero
 
 #include "MUONCommon/MergeableTH1Ratio.h"
 
@@ -84,13 +84,8 @@ MergeableTH1Ratio::MergeableTH1Ratio(const char* name, const char* title, double
 
 MergeableTH1Ratio::~MergeableTH1Ratio()
 {
-  if (mHistoNum) {
-    delete mHistoNum;
-  }
-
-  if (mHistoDen) {
-    delete mHistoDen;
-  }
+  delete mHistoNum;
+  delete mHistoDen;
 }
 
 void MergeableTH1Ratio::merge(MergeInterface* const other)

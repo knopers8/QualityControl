@@ -11,8 +11,6 @@
 
 ///
 /// \file   DigitsTask.h
-/// \author Barthelemy von Haller
-/// \author Piotr Konopka
 /// \author Andrea Ferrero
 ///
 

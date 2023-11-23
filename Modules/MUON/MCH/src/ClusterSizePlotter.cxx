@@ -181,6 +181,24 @@ void ClusterSizePlotter::update(TH2F* hSize)
   fillHistograms(hSize);
 }
 
+void ClusterSizePlotter::addHisto(TH1* h, bool statBox, const char* drawOptions, const char* displayHints)
+{
+  h->SetOption(drawOptions);
+  if (!statBox) {
+    h->SetStats(0);
+  }
+  histograms().emplace_back(HistInfo{ h, drawOptions, displayHints });
+}
+
+void ClusterSizePlotter::addCanvas(TCanvas* c, TH1* h, bool statBox, const char* drawOptions, const char* displayHints)
+{
+  h->SetOption(drawOptions);
+  if (!statBox) {
+    h->SetStats(0);
+  }
+  histograms().emplace_back(HistInfo{ c, "", displayHints });
+}
+
 } // namespace muonchambers
 } // namespace quality_control_modules
 } // namespace o2

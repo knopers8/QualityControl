@@ -145,40 +145,40 @@ bool TracksTask::assertInputs(o2::framework::ProcessingContext& ctx)
 
 void TracksTask::monitorData(o2::framework::ProcessingContext& ctx)
 {
-  ILOG(Info, Devel) << "Debug: MonitorData" << ENDM;
+  ILOG(Debug, Devel) << "Debug: MonitorData" << ENDM;
 
   if (!assertInputs(ctx)) {
     return;
   }
 
-  ILOG(Info, Devel) << "Debug: Asserted inputs" << ENDM;
+  ILOG(Debug, Devel) << "Debug: Asserted inputs" << ENDM;
 
   mRecoCont.collectData(ctx, *mDataRequest.get());
 
-  ILOG(Info, Devel) << "Debug: Collected data" << ENDM;
+  ILOG(Debug, Devel) << "Debug: Collected data" << ENDM;
 
   if (mSrc[GID::MCH] == 1) {
-    ILOG(Info, Devel) << "Debug: MCH requested" << ENDM;
+    ILOG(Debug, Devel) << "Debug: MCH requested" << ENDM;
     if (mRecoCont.isTrackSourceLoaded(GID::MCH)) {
-      ILOG(Info, Devel) << "Debug: MCH source loaded " << mRecoCont.isTrackSourceLoaded(GID::MCH) << ENDM;
+      ILOG(Debug, Devel) << "Debug: MCH source loaded " << mRecoCont.isTrackSourceLoaded(GID::MCH) << ENDM;
       mTrackPlotters[GID::MCH]->fillHistograms(mRecoCont);
     }
   }
   if (mSrc[GID::MCHMID] == 1) {
-    ILOG(Info, Devel) << "Debug: MCHMID requested" << ENDM;
+    ILOG(Debug, Devel) << "Debug: MCHMID requested" << ENDM;
     if (mRecoCont.isMatchSourceLoaded(GID::MCHMID)) {
-      ILOG(Info, Devel) << "Debug: MCHMID source loaded " << mRecoCont.isMatchSourceLoaded(GID::MCHMID) << ENDM;
+      ILOG(Debug, Devel) << "Debug: MCHMID source loaded " << mRecoCont.isMatchSourceLoaded(GID::MCHMID) << ENDM;
       mTrackPlotters[GID::MCHMID]->fillHistograms(mRecoCont);
     }
   }
   if (mSrc[GID::MFTMCH] == 1) {
-    ILOG(Info, Devel) << "Debug: MFTMCH requested" << ENDM;
+    ILOG(Debug, Devel) << "Debug: MFTMCH requested" << ENDM;
     if (mRecoCont.isTrackSourceLoaded(GID::MFTMCH)) {
       mTrackPlotters[GID::MFTMCH]->fillHistograms(mRecoCont);
     }
   }
   if (mSrc[GID::MFTMCHMID] == 1) {
-    ILOG(Info, Devel) << "Debug: MFTMCHMID requested" << ENDM;
+    ILOG(Debug, Devel) << "Debug: MFTMCHMID requested" << ENDM;
     if (mRecoCont.isTrackSourceLoaded(GID::MFTMCH)) {
       mTrackPlotters[GID::MFTMCHMID]->fillHistograms(mRecoCont);
     }

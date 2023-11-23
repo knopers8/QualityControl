@@ -23,7 +23,7 @@ namespace o2::quality_control_modules::muonchambers
 {
 
 void MCHAggregator::configure() {}
-
+// fixme: doesn't it do the same as WorstOfAllAggregator? could it be removed?
 std::map<std::string, Quality> MCHAggregator::aggregate(QualityObjectsMapType& qoMap)
 {
   std::map<std::string, Quality> result;

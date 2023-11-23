@@ -136,7 +136,7 @@ struct CcdbObjectHelper {
 };
 
 //_________________________________________________________________________________________
-
+// fixme: reduntant with QualityTask? could it be removed?
 struct QualityObjectHelper {
   QualityObjectHelper();
   QualityObjectHelper(std::string p, std::string n);
@@ -174,6 +174,7 @@ class TrendGraph : public TCanvas
 };
 
 //_________________________________________________________________________________________
+// fixme: reduntant with QualityTask? could it be removed?
 
 class QualityTrendGraph : public TCanvas
 {

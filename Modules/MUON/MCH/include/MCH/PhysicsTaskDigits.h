@@ -25,7 +25,7 @@ namespace quality_control_modules
 {
 namespace muonchambers
 {
-
+// fixme: is it still needed? could it be removed?
 /// \brief Dummy task for the compatibility with the current full system test
 /// \author Andrea Ferrero
 class PhysicsTaskDigits /*final*/ : public TaskInterface // todo add back the "final" when doxygen is fixed

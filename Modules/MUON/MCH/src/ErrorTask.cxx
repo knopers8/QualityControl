@@ -77,9 +77,8 @@ void ErrorTask::initialize(o2::framework::InitContext& /*ctx*/)
 
   mSummary = createProfile("Summary", "summary of all processing errors;;# per TF",
                            Error::typeNames.size(), 0., Error::typeNames.size());
-  int i = 0;
   for (const auto& typeName : Error::typeNames) {
-    mSummary->GetXaxis()->SetBinLabel(++i, typeName.second.c_str());
+    mSummary->GetXaxis()->SetBinLabel(1, typeName.second.c_str());
   }
 
   auto type = ErrorType::PreClustering_MultipleDigitsInSamePad;

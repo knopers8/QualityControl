@@ -33,8 +33,7 @@ void PreclustersPostProcessing::configure(const boost::property_tree::ptree& con
     TDatime date(refDate.c_str());
     mRefTimeStamp = date.Convert();
   }
-  ILOG(Info, Devel) << "Reference time stamp: " << mRefTimeStamp
-                    << "  (" << refDate << ")" << AliceO2::InfoLogger::InfoLogger::endm;
+  ILOG(Info, Devel) << "Reference time stamp: " << mRefTimeStamp << "  (" << refDate << ")" << ENDM;
 
   mFullHistos = mchConfig.getParameter<bool>("FullHistos", false);
 
@@ -48,7 +47,7 @@ void PreclustersPostProcessing::configure(const boost::property_tree::ptree& con
     mCcdbObjectsRef.emplace(clusterSizeSourceName(), CcdbObjectHelper());
   }
 
-  for (auto source : mchConfig.dataSources) {
+  for (const auto& source : mchConfig.dataSources) {
     std::string sourceType, sourceName;
     splitDataSourceName(source.name, sourceType, sourceName);
     if (sourceType.empty()) {
@@ -90,7 +89,7 @@ void PreclustersPostProcessing::createEfficiencyHistos(Trigger t, repository::Da
   obj = mCcdbObjectsRef.find(effSourceName());
   if (obj != mCcdbObjectsRef.end() && obj->second.update(qcdb, mRefTimeStamp)) {
     ILOG(Info, Devel) << "Loaded reference plot \"" << obj->second.mObject->getName() << "\", time stamp " << mRefTimeStamp
-                      << AliceO2::InfoLogger::InfoLogger::endm;
+                      << ENDM;
     hElecHistoRef = obj->second.get<TH2F>();
   }
 

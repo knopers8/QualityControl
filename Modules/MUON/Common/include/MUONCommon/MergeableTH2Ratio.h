@@ -10,23 +10,22 @@
 // or submit itself to any jurisdiction.
 
 /// \file MergeableTH2Ratio.h
-/// \brief An example of a custom TH2Quotient inheriting MergeInterface
+/// \brief Mergeable TH2 Ratio inheriting MergeInterface
 ///
-/// \author Piotr Konopka, piotr.jan.konopka@cern.ch, Sebastien Perrin, Andrea Ferrero
+/// \author Sebastien Perrin, Andrea Ferrero
 
 #ifndef O2_MERGEABLETH2RATIO_H
 #define O2_MERGEABLETH2RATIO_H
 
-#include <sstream>
-#include <iostream>
-#include <TObject.h>
-#include <TH2.h>
+#include <TH2F.h>
+#include <string>
 #include "Mergers/MergeInterface.h"
 
 using namespace std;
 namespace o2::quality_control_modules::muon
 {
 
+// fixme: could it be removed now that we have TH2Ratio?
 class MergeableTH2Ratio : public TH2F, public o2::mergers::MergeInterface
 {
  public:

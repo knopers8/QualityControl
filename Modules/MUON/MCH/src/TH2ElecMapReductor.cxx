@@ -25,6 +25,7 @@
 #include <regex>
 #include <gsl/gsl>
 #include <limits>
+#include "QualityControl/QcInfoLogger.h"
 
 using namespace o2::mch;
 using namespace o2::quality_control_modules::muon;
@@ -108,19 +109,19 @@ int TH2ElecMapReductor::getNumPadsNoStat(int deid, int cathode)
 void TH2ElecMapReductor::update(TObject* obj)
 {
   if (sDeNum != getNumDE()) {
-    std::cout << "wrong sDeNum" << std::endl;
+    ILOG(Warning) << "wrong sDeNum" << ENDM;
     return;
   }
 
   auto h = dynamic_cast<TH2*>(obj);
   if (!h) {
-    std::cout << "cannot cast to TH2F" << std::endl;
+    ILOG(Warning) << "cannot cast to TH2F" << ENDM;
     return;
   }
 
   auto* hr = dynamic_cast<MergeableTH2Ratio*>(obj);
   if (!hr) {
-    std::cout << "cannot cast to MergeableTH2Ratio" << std::endl;
+    ILOG(Warning) << "cannot cast to MergeableTH2Ratio" << ENDM;
     return;
   }
 

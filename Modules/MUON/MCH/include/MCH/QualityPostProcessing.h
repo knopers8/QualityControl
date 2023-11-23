@@ -25,7 +25,7 @@
 #include <TH1F.h>
 
 using namespace o2::quality_control::postprocessing;
-
+// fixme: reduntant with QualityTask? could it be removed?
 namespace o2::quality_control_modules::muonchambers
 {
 

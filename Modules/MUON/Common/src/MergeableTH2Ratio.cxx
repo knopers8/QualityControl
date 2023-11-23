@@ -10,15 +10,14 @@
 // or submit itself to any jurisdiction.
 
 /// \file MergeableTH2Ratio.cxx
-/// \brief An example of a custom TH2Quotient inheriting MergeInterface
+/// \brief Mergeable TH2 Ratio inheriting MergeInterface
 ///
-/// \author Piotr Konopka, piotr.jan.konopka@cern.ch, Sebastien Perrin, Andrea Ferrero
+/// \author Sebastien Perrin, Andrea Ferrero
 
 #include "MUONCommon/MergeableTH2Ratio.h"
 #include "QualityControl/QcInfoLogger.h"
 #include <TList.h>
 
-#include <fmt/format.h>
 #include <limits>
 
 using namespace std;

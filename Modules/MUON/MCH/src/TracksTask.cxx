@@ -343,6 +343,7 @@ void TracksTask::endOfActivity(const Activity& /*activity*/)
 void TracksTask::reset()
 {
   ILOG(Warning, Support) << "resetting the histograms is not implemented" << ENDM;
+  // fixme: perhaps it should be? ;)
 }
 
 } // namespace o2::quality_control_modules::muonchambers
