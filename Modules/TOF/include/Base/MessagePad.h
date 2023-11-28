@@ -24,10 +24,8 @@
 #include "QualityControl/QcInfoLogger.h"
 
 // ROOT includes
-#include "TPaveText.h"
-#include "TList.h"
-#include "TH1F.h"
-#include "TH2F.h"
+#include <TPaveText.h>
+#include <TList.h>
 
 namespace o2::quality_control_modules::tof
 {

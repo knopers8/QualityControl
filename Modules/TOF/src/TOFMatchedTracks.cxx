@@ -24,10 +24,8 @@
 #include "QualityControl/QcInfoLogger.h"
 #include "TOF/TOFMatchedTracks.h"
 #include <Framework/InputRecord.h>
-#include <Framework/InputRecordWalker.h>
 #include <Framework/InputSpec.h>
 #include "GlobalTrackingWorkflowHelpers/InputHelper.h"
-#include "ReconstructionDataFormats/TrackTPCITS.h"
 #include "ReconstructionDataFormats/TrackTPCITS.h"
 #include "DataFormatsTPC/TrackTPC.h"
 #include "DataFormatsGlobalTracking/RecoContainerCreateTracksVariadic.h"
@@ -677,8 +675,6 @@ void TOFMatchedTracks::fillNumeratorForExperts(float eta, float phi, int channel
     stripFromTrack--;
   }
 
-  // ILOG(Info, Devel) << "eta = " << eta << ", strip = " << stripFromTrack<<  ENDM;
-
   int iSect = o2::math_utils::angle2Sector(phi);
   stripFromTrack += iSect * 91;
 
@@ -687,10 +683,6 @@ void TOFMatchedTracks::fillNumeratorForExperts(float eta, float phi, int channel
   int strip = channel / 96;
 
   // fill histo with residualts (x,z) vs strip extrapolated from track and vs strip from matching
-
-  // ILOG(Info, Devel) << "phi = " << phi << ENDM;
-  // ILOG(Info, Devel) << "strip from eta,phi = " << stripFromTrack % 91 << ", sector = " << iSect << ENDM;
-  // ILOG(Info, Devel) << "strip from channel = " << strip % 91 << ", sector = " << strip / 91 <<  ENDM;
 
   mHistoExpMatchedNhit->Fill(strip, nhit);
   mHistoExpMatchedStrip->Fill(stripFromTrack);

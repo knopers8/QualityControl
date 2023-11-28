@@ -20,6 +20,7 @@
 #include "TOF/Utils.h"
 #include "QualityControl/QcInfoLogger.h"
 #include "QualityControl/MonitorObject.h"
+#include <TH2I.h>
 
 #include <DataFormatsQualityControl/FlagReasons.h>
 

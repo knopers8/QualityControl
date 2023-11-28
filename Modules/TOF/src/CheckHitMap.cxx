@@ -23,6 +23,7 @@
 #include "CCDB/BasicCCDBManager.h"
 #include "DataFormatsTOF/TOFFEElightInfo.h"
 #include "TOFBase/Geo.h"
+#include <TH2F.h>
 
 // ROOT
 #include "TLine.h"
@@ -62,6 +63,7 @@ Quality CheckHitMap::check(std::map<std::string, std::shared_ptr<MonitorObject>>
       mShifterMessages.AddMessage("No counts!");
     } else if (mEnableReferenceHitMap) { // Histogram is non empty. Here we should check that it is in agreement with the reference from CCDB
       // Getting the reference map
+      // fixme: use UserCodeInterface::RetrieveConditionAny
       const auto* refmap = o2::ccdb::BasicCCDBManager::instance().getForTimeStamp<o2::tof::TOFFEElightInfo>(mRefMapCcdbPath, mRefMapTimestamp);
       if (!mHistoRefHitMap) {
         ILOG(Debug, Devel) << "making new refmap " << refmap << ENDM;

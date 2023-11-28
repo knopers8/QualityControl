@@ -21,6 +21,7 @@
 #include "QualityControl/CheckInterface.h"
 #include "Base/MessagePad.h"
 #include "TPad.h"
+#include <TH2F.h>
 
 namespace o2::quality_control_modules::tof
 {

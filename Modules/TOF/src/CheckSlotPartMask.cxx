@@ -21,6 +21,7 @@
 #include "QualityControl/Quality.h"
 #include "TOF/Utils.h"
 #include "QualityControl/QcInfoLogger.h"
+#include <TH2F.h>
 
 using namespace std;
 

@@ -44,7 +44,7 @@ void PostProcessHitMap::configure(const boost::property_tree::ptree& config)
   if (const auto& customConfigs = config.get_child_optional("qc.postprocessing." + getID() + ".customization"); customConfigs.has_value()) {
     for (const auto& customConfig : customConfigs.value()) { // Plot configuration
       if (const auto& customNames = customConfig.second.get_child_optional("name"); customNames.has_value()) {
-        if (customConfig.second.get<std::string>("name") == "CCDBPath") {
+        if (customConfig.second.get<std::string>("name") == "CCDBPath") { // fixme: why not use qc.config.conditionDB.url?
           mCCDBPath = customConfig.second.get<std::string>("value");
           ILOG(Info, Support) << "Setting CCDBPath to " << mCCDBPath << ENDM;
         } else if (customConfig.second.get<std::string>("name") == "RefMapCcdbPath") {

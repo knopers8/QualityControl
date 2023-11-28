@@ -21,6 +21,7 @@
 #include "QualityControl/QcInfoLogger.h"
 #include "QualityControl/MonitorObject.h"
 #include <DataFormatsQualityControl/FlagReasons.h>
+#include <TH1F.h>
 
 using namespace std;
 using namespace o2::quality_control;

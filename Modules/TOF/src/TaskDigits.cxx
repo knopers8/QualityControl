@@ -242,6 +242,7 @@ void TaskDigits::monitorData(o2::framework::ProcessingContext& ctx)
 {
   if (mApplyCalib && !mCalChannel) {
     auto creationTime = ctx.services().get<o2::framework::TimingInfo>().creation;
+    // fixme: use DPL CCDB inputs or UserCodeInterface::RetrieveConditionAny
     mCalChannel = o2::ccdb::BasicCCDBManager::instance().getForTimeStamp<o2::dataformats::CalibTimeSlewingParamTOF>("TOF/Calib/ChannelCalib", creationTime);
     mLHCphase = o2::ccdb::BasicCCDBManager::instance().getForTimeStamp<o2::dataformats::CalibLHCphaseTOF>("TOF/Calib/LHCphase", creationTime);
   }
@@ -364,10 +365,8 @@ void TaskDigits::monitorData(o2::framework::ProcessingContext& ctx)
 
       if (mNoiseClassSelection >= 0 &&
           diafreq->isNoisyChannel(digit.getChannel(), mNoiseClassSelection)) {
-        //        LOG(info) << "noisy channel " << digit.getChannel();
         continue;
       }
-      //      LOG(info) << "good channel " << digit.getChannel();
 
       // Correct BC index
       int bcCorr = digit.getIR().bc - o2::tof::Geo::LATENCYWINDOW_IN_BC;

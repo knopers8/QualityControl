@@ -20,6 +20,8 @@
 #include "QualityControl/QcInfoLogger.h"
 #include "QualityControl/MonitorObject.h"
 
+#include <TH2F.h>
+
 using namespace std;
 
 namespace o2::quality_control_modules::tof
@@ -44,6 +46,10 @@ Quality CheckCompressedData::check(std::map<std::string, std::shared_ptr<Monitor
     (void)moName;
     if (mo->getName() == "hDiagnostic") {
       auto* h = dynamic_cast<TH2F*>(mo->getObject());
+      if (h == nullptr) {
+        ILOG(Error, Support) << "could not cast hDiagnostic to TH2F" << ENDM;
+        return Quality::Null;
+      }
       result = Quality::Good;
       for (int i = 1; i < h->GetNbinsX(); i++) {
         for (int j = 1; j < h->GetNbinsY(); j++) {
@@ -66,6 +72,10 @@ void CheckCompressedData::beautify(std::shared_ptr<MonitorObject> mo, Quality ch
 {
   if (mo->getName() == "hDiagnostic") {
     auto* h = dynamic_cast<TH2F*>(mo->getObject());
+    if (h == nullptr) {
+      ILOG(Error, Support) << "could not cast hDiagnostic to TH2F" << ENDM;
+      return;
+    }
     auto msg = mShifterMessages.MakeMessagePad(h, checkResult);
     if (!msg) {
       return;

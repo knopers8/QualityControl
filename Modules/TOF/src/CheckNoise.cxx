@@ -19,6 +19,8 @@
 #include "TOF/CheckNoise.h"
 #include "QualityControl/QcInfoLogger.h"
 #include "QualityControl/MonitorObject.h"
+#include <TH1F.h>
+#include <TH2F.h>
 
 using namespace std;
 

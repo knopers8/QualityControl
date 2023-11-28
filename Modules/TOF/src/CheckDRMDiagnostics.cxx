@@ -20,6 +20,7 @@
 #include "QualityControl/MonitorObject.h"
 #include "QualityControl/Quality.h"
 #include "QualityControl/QcInfoLogger.h"
+#include <TH2F.h>
 
 using namespace std;
 
