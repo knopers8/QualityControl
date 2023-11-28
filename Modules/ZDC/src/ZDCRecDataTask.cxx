@@ -20,7 +20,6 @@
 #include "QualityControl/QcInfoLogger.h"
 #include "ZDC/ZDCRecDataTask.h"
 #include <Framework/InputRecord.h>
-#include <Framework/InputRecordWalker.h>
 #include <Framework/DataRefUtils.h>
 #include <fairlogger/Logger.h>
 #include <stdio.h>
@@ -28,19 +27,15 @@
 #include <iostream>
 #include <fstream>
 #include <ctype.h>
-#include <boost/algorithm/string.hpp>
 #include <gsl/span>
 #include <vector>
-#include "DataFormatsZDC/BCData.h"
-#include "DataFormatsZDC/ChannelData.h"
-#include "DataFormatsZDC/OrbitData.h"
-#include "DataFormatsZDC/RecEvent.h"
-#include "ZDCBase/ModuleConfig.h"
+#include "ZDCBase/Constants.h"
 #include "CommonUtils/NameConf.h"
 #include "ZDCReconstruction/RecoConfigZDC.h"
 #include "ZDCReconstruction/ZDCEnergyParam.h"
 #include "ZDCReconstruction/ZDCTowerParam.h"
 #include "DataFormatsZDC/RecEventFlat.h"
+#include "ZDCSimulation/ZDCSimParam.h"
 
 using namespace o2::zdc;
 namespace o2::quality_control_modules::zdc
@@ -48,6 +43,8 @@ namespace o2::quality_control_modules::zdc
 
 ZDCRecDataTask::~ZDCRecDataTask()
 {
+  // fixme: this does not delete pointers that are stored in these vectors
+  //  consider using smart pointers or delete these manually here
   mVecCh.clear();
   mVecType.clear();
   mNameHisto.clear();
@@ -697,7 +694,7 @@ int ZDCRecDataTask::process(const gsl::span<const o2::zdc::BCRecData>& RecBC,
 
 float ZDCRecDataTask::getADCRecValue(std::string typech, std::string ch)
 {
-  if (typech.compare("ADC") == 0 && ch.compare("ZNAC") == 0) {
+  if (typech == "ADC" && ch == "ZNAC") {
     return mEv.EZNAC();
   }
   if (typech.compare("ADC") == 0 && ch.compare("ZNA1") == 0) {

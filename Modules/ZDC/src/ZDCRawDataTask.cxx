@@ -20,7 +20,6 @@
 #include "QualityControl/QcInfoLogger.h"
 #include "ZDC/ZDCRawDataTask.h"
 #include <Framework/InputRecord.h>
-#include <Framework/InputRecordWalker.h>
 #include "DPLUtils/DPLRawParser.h"
 #include <TROOT.h>
 #include <TPad.h>
@@ -45,27 +44,14 @@ namespace o2::quality_control_modules::zdc
 
 ZDCRawDataTask::~ZDCRawDataTask()
 {
-  if (fFireChannel) {
-    delete fFireChannel;
-  }
-  if (fTrasmChannel) {
-    delete fTrasmChannel;
-  }
-  if (fSummaryPedestal) {
-    delete fSummaryPedestal;
-  }
-  if (fTriggerBits) {
-    delete fTriggerBits;
-  }
-  if (fTriggerBitsHits) {
-    delete fTriggerBitsHits;
-  }
-  if (fDataLoss) {
-    delete fDataLoss;
-  }
-  if (fOverBc) {
-    delete fOverBc;
-  }
+  // fixme: not all pointers belonging to the task are deleted here
+  delete fFireChannel;
+  delete fTrasmChannel;
+  delete fSummaryPedestal;
+  delete fTriggerBits;
+  delete fTriggerBitsHits;
+  delete fDataLoss;
+  delete fOverBc;
 }
 
 void ZDCRawDataTask::initialize(o2::framework::InitContext& /*ctx*/)
@@ -103,11 +89,6 @@ void ZDCRawDataTask::monitorData(o2::framework::ProcessingContext& ctx)
     auto rdhPtr = reinterpret_cast<const o2::header::RDHAny*>(it.raw());
     if (rdhPtr == nullptr || !o2::raw::RDHUtils::checkRDH(rdhPtr, true)) {
       nErr[0]++;
-      /*if (nErr[0] < 5) {
-        LOG(warning) << "ZDCDataReaderDPLSpec::run - Missing RAWDataHeader on page " << count;
-      } else if (nErr[0] == 5) {
-        LOG(warning) << "ZDCDataReaderDPLSpec::run - Missing RAWDataHeader on page " << count << " suppressing further messages";
-      }*/
     } else {
       if (it.data() == nullptr) {
         nErr[1]++;

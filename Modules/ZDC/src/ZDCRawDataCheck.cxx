@@ -58,6 +58,10 @@ Quality ZDCRawDataCheck::check(std::map<std::string, std::shared_ptr<MonitorObje
       if (mo->getName() == mVectHistoCheck.at(ih).nameHisto) {
         if ((mo->getName() == "hpedSummary")) {
           auto* h = dynamic_cast<TH1*>(mo->getObject());
+          if (h == nullptr) {
+            ILOG(Error, Support) << "could not cast hpedSummary to TH1*" << ENDM;
+            return Quality::Null;
+          }
           if ((int)h->GetNbinsX() != (int)mVectHistoCheck.at(ih).paramch.size()) {
             return Quality::Null;
           }
@@ -177,6 +181,10 @@ void ZDCRawDataCheck::beautify(std::shared_ptr<MonitorObject> mo, Quality checkR
 
     if (mo->getName() == mVectHistoCheck.at(ih).nameHisto) {
       auto* h = dynamic_cast<TH1*>(mo->getObject());
+      if (h == nullptr) {
+        ILOG(Error, Support) << "could not cast '" << mo->getName() << "' to TH1*" << ENDM;
+        return;
+      }
 
       if (mVectHistoCheck.at(ih).quality == 1) {
         std::string errorSt = getCurrentDataTime() + " Ok";
