@@ -18,9 +18,8 @@
 #define QC_MODULE_CTP_CTPCOUNTERSQCTASK_H
 
 #include "QualityControl/TaskInterface.h"
-#include "DataFormatsCTP/Configuration.h"
-#include "DataFormatsCTP/RunManager.h"
-#include "TH1.h"
+#include <DataFormatsCTP/Configuration.h>
+#include <DataFormatsCTP/RunManager.h>
 
 class TH1F;
 class TH1D;
@@ -58,7 +57,7 @@ class CTPCountersTask final : public TaskInterface
   void SetIsFirstCycle(bool isFirstCycle = true) { mIsFirstCycle = isFirstCycle; }
   void SetFirstTimeStamp(double firstTimeStamp = 0) { mFirstTimeStamp = firstTimeStamp; }
   void SetPreviousTimeStamp(double previousTimeStamp = 0) { mPreviousTimeStamp = previousTimeStamp; }
-  void SetRateHisto(TH1D* h, double ofs)
+  void SetRateHisto(TH1D* h, double ofs) // todo: move to source file?
   {
     h->GetXaxis()->SetTimeDisplay(1);
     h->GetXaxis()->SetTimeOffset(ofs);

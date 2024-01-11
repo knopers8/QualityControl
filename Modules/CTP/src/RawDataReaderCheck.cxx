@@ -70,9 +70,13 @@ Quality RawDataReaderCheck::check(std::map<std::string, std::shared_ptr<MonitorO
     (void)moName;
     if (mo->getName() == "histobc") {
       auto* h = dynamic_cast<TH1F*>(mo->getObject());
+      if (h == nullptr) {
+        ILOG(Error, Support) << "could not cast histobc to TH1F*, skipping..." << ENDM;
+        continue;
+      }
 
       result = Quality::Good;
-      result.addMetadata("BC_id", "good");
+      result.addMetadata("BC_id", "good"); // is it correct to add "good" metadata without a prior check?
       for (int i = 0; i < o2::constants::lhc::LHCMaxBunches; i++) {
         if (lhcBC_bitset[i] && h->GetBinContent(i + 1) < threshold) {
           result = Quality::Bad;

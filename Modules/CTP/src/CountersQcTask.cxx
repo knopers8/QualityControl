@@ -84,22 +84,9 @@ void CTPCountersTask::initialize(o2::framework::InitContext& /*ctx*/)
 
   {
     for (int j = 0; j < 16; j++) {
-      // auto name = std::string("Class rates in Run ") + std::to_string(mActiveRun[j]);
       auto name = std::string("Class_rates_in_Run_position_in_payload:") + std::to_string(j);
       mTCanvasClassRates[j] = new TCanvas(name.c_str(), name.c_str(), 2500, 2500);
       mTCanvasClassRates[j]->Clear();
-      /*mTCanvasClassRates[j]->Divide(mXPad[j], mXPad[j]);
-
-      for (size_t i = 0; i < mNumberOfClasses[j]; i++) {
-        int k = mActiveClassInRun[i];
-        auto name = std::string("Rate_of_class") + std::to_string(k);
-        //mHistClassRate[k] = new TH1D(name.c_str(), name.c_str(), 1, 0, 1);
-        //mHistClassRate[k]->GetXaxis()->SetTitle("Time");
-        //mHistClassRate[k]->GetYaxis()->SetTitle("Rate[Hz]");
-        mTCanvasClassRates[j]->cd(i + 1);
-        mHistClassRate[k]->Draw();
-        mHistClassRate[k]->SetBit(TObject::kCanDelete);
-      }*/
       getObjectsManager()->startPublishing(mTCanvasClassRates[j]);
     }
   }
@@ -188,11 +175,6 @@ void CTPCountersTask::startOfCycle()
 
 void CTPCountersTask::monitorData(o2::framework::ProcessingContext& ctx)
 {
-  // dummy publishing
-  // mDummyCountsHist = new TH1D("DummyCounts", "Dummy counts", 1, 0, 1);
-  // getObjectsManager()->startPublishing(mDummyCountsHist);
-  //  get the input
-  // std::cout << "before data reading ";
   o2::framework::InputRecord& inputs = ctx.inputs();
   o2::framework::DataRef ref = inputs.get("readout");
 
@@ -211,7 +193,7 @@ void CTPCountersTask::monitorData(o2::framework::ProcessingContext& ctx)
 
   // ctpconfig - add classes to newly loaded run
   if (tokens[0] == "ctpconfig") {
-    LOG(info) << "CTP run configuration:";
+    ILOG(Debug, Devel) << "CTP run configuration:" << ENDM;
     // we have to get a rid of the first substring - ctpconfig to gain rcfg message
     std::string subspp = "ctpconfig ";
     std::string::size_type posInSpp = spp.find(subspp);
@@ -219,17 +201,17 @@ void CTPCountersTask::monitorData(o2::framework::ProcessingContext& ctx)
       spp.erase(posInSpp, subspp.length());
     std::string ctpConf = spp;
     // LOG(info) << "Rcfg message:";
-    LOG(info) << ctpConf;
+    ILOG(Debug, Devel) << ctpConf << ENDM;
     // get Trigger Class Mask for the run from the CTP configuration
     o2::ctp::CTPConfiguration activeConf;
     activeConf.loadConfigurationRun3(ctpConf);
     activeConf.printStream(std::cout);
     uint64_t runClassMask = activeConf.getTriggerClassMask();
-    LOG(info) << "Class Mask Qc: " << runClassMask;
+    ILOG(Debug, Devel) << "Class Mask Qc: " << runClassMask << ENDM;
     std::vector<int> runClassList = activeConf.getTriggerClassList();
-    std::cout << "size of runClassList: " << runClassList.size() << std::endl;
+    ILOG(Debug, Devel) << "size of runClassList: " << runClassList.size() << ENDM;
     for (auto i : runClassList) {
-      std::cout << " print class list: " << i << " ";
+      ILOG(Debug, Devel) << " print class list: " << i << " " << ENDM;
     }
     uint32_t runNumber = activeConf.getRunNumber();
     // runCTPQC mNewRun;

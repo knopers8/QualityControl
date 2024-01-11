@@ -27,8 +27,8 @@ using namespace o2::quality_control::core;
 namespace o2::quality_control_modules::ctp
 {
 
-/// \brief Example Quality Control DPL Task
-/// \author My Name
+/// \brief CTP Raw Data Reader QC Task
+/// \author Marek Bombara
 class CTPRawDataReaderTask final : public TaskInterface
 {
  public:
