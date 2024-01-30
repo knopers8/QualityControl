@@ -203,8 +203,6 @@ TriggerFcn NewObject(const std::string& databaseUrl, const std::string& database
 
 TriggerFcn ForEachObject(const std::string& databaseUrl, const std::string& databaseType, const std::string& objectPath, const Activity& activity, const std::string& config)
 {
-  // Key names in the header map.
-  constexpr auto timestampSortKey = metadata_keys::validFrom;
   auto fullObjectPath = (databaseType == "qcdb" ? activity.mProvenance + "/" : "") + objectPath;
 
   // We support only CCDB here.
@@ -233,14 +231,16 @@ TriggerFcn ForEachObject(const std::string& databaseUrl, const std::string& data
   // we make sure it is sorted. If it is already, it shouldn't cost much.
   std::sort(filteredObjects->begin(), filteredObjects->end(),
             [](const boost::property_tree::ptree& a, const boost::property_tree::ptree& b) {
-              return a.get<int64_t>(timestampSortKey) < b.get<int64_t>(timestampSortKey);
+              return std::forward_as_tuple(a.get<int64_t>(metadata_keys::validFrom), a.get<int64_t>(metadata_keys::validUntil)) <
+                     std::forward_as_tuple(b.get<int64_t>(metadata_keys::validFrom), b.get<int64_t>(metadata_keys::validUntil));
             });
 
   return [filteredObjects, activity, currentObject = filteredObjects->begin(), config]() mutable -> Trigger {
     if (currentObject != filteredObjects->end()) {
       auto currentActivity = activity_helpers::asActivity(*currentObject, activity.mProvenance);
       bool last = currentObject + 1 == filteredObjects->end();
-      Trigger trigger(TriggerType::ForEachObject, last, currentActivity, currentObject->get<int64_t>(timestampSortKey));
+      auto timestamp = activity_helpers::isLegacyValidity(currentActivity.mValidity) ? currentActivity.mValidity.getMin() : (currentActivity.mValidity.getMax() - 1);
+      Trigger trigger(TriggerType::ForEachObject, last, currentActivity, timestamp);
       ++currentObject;
       return trigger;
     } else {
@@ -304,7 +304,8 @@ TriggerFcn ForEachLatest(const std::string& databaseUrl, const std::string& data
       const auto& currentActivity = currentObject->first;
       const auto& currentPtree = currentObject->second;
       bool last = currentObject + 1 == filteredObjects->end();
-      Trigger trigger(TriggerType::ForEachLatest, last, currentActivity, currentPtree.get<int64_t>(metadata_keys::validFrom), config);
+      auto timestamp = activity_helpers::isLegacyValidity(currentActivity.mValidity) ? currentActivity.mValidity.getMin() : (currentActivity.mValidity.getMax() - 1);
+      Trigger trigger(TriggerType::ForEachLatest, last, currentActivity, timestamp, config);
       ++currentObject;
       return trigger;
     } else {
